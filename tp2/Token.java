@@ -6,7 +6,7 @@ public class Token {
   /*
    * Los colores posibles son: blanco = 'b', negro = 'n' y vacio = '_'
   */
-  
+
   public Token (int i, int j, char c){
     this.row = i;
     this.column=j;
@@ -17,7 +17,7 @@ public class Token {
     return this.row;
   }
 
-  public int getcolumn(){
+  public int getColumn(){
     return this.column;
   }
 

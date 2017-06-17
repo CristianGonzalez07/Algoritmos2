@@ -15,7 +15,9 @@ import java.util.Arrays;
 public class State implements AdversarySearchState {
     private ArrayList<Token> tokens;
     private boolean max;
-    private char [][] board;
+    //Cantidad de fichas jugadas por cada jugador
+    private int tokensPlayer;
+    private int tokensCpu;
 
     /** 
      * Indicates whether the current state is a max state or not.
@@ -29,24 +31,36 @@ public class State implements AdversarySearchState {
     /*
      * La letra 'P' que acompaña a los parametros es para distinguirlos.   
     */
-
-    //Debatir si es necesario inicializar como parametro el board o crearlo dentro de
-    // esta clase a partir de los tokens
-    public State(ArrayList<Token> tokensP, boolean maxP,char [][] boardP){
+    public State(ArrayList<Token> tokensP, boolean maxP,int tokensPlayerP,int tokensCPUP){
         this.tokens =tokensP;
         this.max = maxP;
-        this.board = boardP;
+        this.tokensPlayer=tokensPlayerP;
+        this.tokensCPU=tokensPlayerP;
     }
+
 
     public boolean isMax(){
         return max;
     }
-    
+
     public ArrayList<Token> getTokens(){
         return this.tokens;
     }
-    public char[][] getBoard(){
-        return this.board;
+
+    public int getTokensPlayer(){
+        return  this.tokensPlayer;
+    }
+
+    public int getTokensCPU(){
+        return  this.tokensCPU;
+    }
+
+    public void setTokensPlayer(int tplayer){
+        this.tokensPlayer = tplayer;
+    }
+
+    public void setTokensCPU(int tCPU){
+        this.tokensCPU = tCPU;
     }
 
     /** 
