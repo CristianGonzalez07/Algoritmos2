@@ -4,47 +4,63 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.Runtime;
 
-
 public class Main{	
 
+	/**
+	 *	Function that removes characters that are not needed from a string
+	 * 	@return subset of s deleting unnecessary characters
+	 *	@param s it's a string to divide
+	 *	@pre.  s != ""
+	 *	@post. res = subset of s deleting unnecessary characters
+     */  
 	private static String[] divideString(String s){
 		//res[0]=descripcion | res[1]=valor | res[2]=costo
 		String[] res= new String[3];
 		//aux[0]=descripcion | aux[1]=valor/costo
 		String[] aux=s.split("\\' ");
-		res[0]=aux[0].replace("'","");// Eliminacion de la comilla inicial
+		res[0]=aux[0].replace("'","");
 		String[] aux2=aux[1].split("\\ ");
 		res[1]=aux2[0];
 		res[2]=aux2[1];
 		return res;
 	}
-	
-	public static void creacionArchivo(ArrayList<Historia> res){
+
+	/**
+	 *	Function that creates a file and loads it with the data corresponding to the backlog histories
+	 *	@param res it's a list with stories to keep
+	 *	@pre. res size > 0 
+	 *	@post. Create a file called backlogOK.txt
+     */  
+	public static void createFile(ArrayList<Story> res){
 		try{
 			int size = res.size();
-			File archivo=new File("backlogOK.txt");
-
-			// Crea un  objeto FileWriter que sera el que nos ayude a escribir sobre archivo
-			FileWriter escribir=new FileWriter(archivo);
-			escribir.write("Sprint"+"\n"+"\n");
-			escribir.write("\t"+"  Actividad|Prioridad|  Costo|");
+			File file=new File("backlogOK.txt");
+			FileWriter writer = new FileWriter(file);
+			writer.write("Sprint"+"\n"+"\n");
+			writer.write("\t"+"  Actividad|Prioridad|  Costo|");
 			for(int i=0;i<size;i++){
-				Historia aux = res.get(i);
-				escribir.write("\n"+"\t"+aux.getDescripcion()+"|");
-				escribir.write("\t"+"\t"+aux.getPrioridad()+"|");
-				escribir.write("\t"+"\t"+aux.getCosto()+"|");
+				Story aux = res.get(i);
+				writer.write("\n"+"\t"+aux.getDescription()+"|");
+				writer.write("\t"+"\t"+aux.getPriority()+"|");
+				writer.write("\t"+"\t"+aux.getWeight()+"|");
 			}
-			escribir.close();	
+			writer.close();	
 		}catch(Exception e){
 			System.out.println("Error al calcular las historias del sprint");
 		}
 	}
 
-
-	public static ArrayList<Historia> lecturaArchivo(String nombre){
-		ArrayList<Historia> result = new ArrayList<Historia>();
+	/**
+	 *	A function that reads a file with the data corresponding to the backlog histories
+	 *	@return res it's a list with stories
+	 *	@param Name is the name of the file to read
+	 *	@pre. backlog.txt exists
+	 *	@post. a list with stories
+     */  
+	public static ArrayList<Story> readFile (String name){
+		ArrayList<Story> result = new ArrayList<Story>();
 		try{
-			FileReader fr = new FileReader(nombre); 
+			FileReader fr = new FileReader(name); 
 			BufferedReader br = new BufferedReader(fr); 
 			String s;
 			int cont = 0; 
@@ -52,16 +68,15 @@ public class Main{
 		  		cont++;
 			}
 			
-			//lectura de las lineas del archivo y creacion de las Triplas
 		 	fr = new FileReader("backlog.txt");
 	 		br = new BufferedReader(fr); 
 			String[] array;
 			while((s = br.readLine()) != null) {
 				array = divideString(s);
-				int prioridad = Integer.parseInt(array[1]);
-				int costo = Integer.parseInt(array[2]);
-				Historia cp = new Historia(array[0], prioridad, costo);
-				result.add(cp);
+				int priority = Integer.parseInt(array[1]);
+				int weight = Integer.parseInt(array[2]);
+				Story h = new Story(array[0], priority, weight);
+				result.add(h);
 			}	
 			fr.close();
 		}catch(Exception e){
@@ -69,48 +84,42 @@ public class Main{
 		}
 		return result;
 	}
+
+
 	public static void main(String[] args) throws Exception {
 		try{
-			ArrayList<Historia> historias = lecturaArchivo("backlog.txt");
-	 		int n = historias.size();
-	 		Integer[] costos = new Integer[n];
-	    	Integer[] prioridades = new Integer[n];
-	    	int prioridad = 0; 
-	 		int costo = 0;
+			ArrayList<Story> stories = readFile("backlog.txt");
+	 		int n = stories.size();
+	 		Integer[] weights = new Integer[n];
+	    	Integer[] priorities = new Integer[n];
+	    	int priority = 0; 
+	 		int weight = 0;
 	 		
-
-			for(int i = 0;i<historias.size();i++){
-				prioridad = historias.get(i).getPrioridad();
-				costo = historias.get(i).getCosto();
-				prioridades[i] = prioridad;
-				costos[i] = costo;
+			for(int i = 0;i<stories.size();i++){
+				priority = stories.get(i).getPriority();
+				weight = stories.get(i).getWeight();
+				priorities[i] = priority;
+				weights[i] = weight;
 			}
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("Ingrese el tiempo del sprint");
-			String tiempo = br.readLine();
-			Integer tiempoSprint = Integer.parseInt(tiempo);
-	 
-			Sprint sprint = new Sprint(tiempoSprint,costos,prioridades);
-			sprint.generarSprint(costos.length,tiempoSprint);
+			String time = br.readLine();
+			Integer timeSprint = Integer.parseInt(time);
+			Sprint sprint = new Sprint(timeSprint,weights,priorities);
+			sprint.generateSprint(weights.length,timeSprint);
 			ArrayList<Integer> res = new ArrayList<Integer>();
 			res = sprint.getSprint();
-			ArrayList<Historia> result = new ArrayList<Historia>();
-			Historia historia;
+			ArrayList<Story> result = new ArrayList<Story>();
+			Story story;
 			int pos = 0;
-			
 			for(int i = 0;i<res.size();i++){
 				pos = res.get(i);
-				historia = historias.get(pos-1);
-				result.add(historia);
+				story = stories.get(pos-1);
+				result.add(story);
 			}
-
-			creacionArchivo(result);
-			// Mensaje de que se efectuo correctamente
+			createFile(result);
 			System.out.println("Abriendo el archivo backlogOK.txt");
-
-			// Deteccion de sistema operativo para la apertura del editor de texto con el 
-			// backlog ordenado.
 			String sys = System.getProperty("os.name");
 			switch (sys){
 				case "Linux": Process linux = Runtime.getRuntime().exec ("subl backlogOK.txt"); 
