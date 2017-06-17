@@ -5,7 +5,7 @@ public class Problem implements AdversarySearchProblem{
     
     
     public S initialState(){
-        char [][] board=new int [7][7];
+        char [][] board=new char [7][7];
         // Llenamos el arreglos con todos los espacios vacios
         for (char[] row: arr)
             Arrays.fill(row, '_');

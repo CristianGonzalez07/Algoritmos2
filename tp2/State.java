@@ -32,7 +32,7 @@ public class State implements AdversarySearchState {
 
     //Debatir si es necesario inicializar como parametro el board o crearlo dentro de
     // esta clase a partir de los tokens
-    public State(ArrayList<Token> tokensP, boolean maxP,int [][] boardP){
+    public State(ArrayList<Token> tokensP, boolean maxP,char [][] boardP){
         this.tokens =tokensP;
         this.max = maxP;
         this.board = boardP;
@@ -40,6 +40,13 @@ public class State implements AdversarySearchState {
 
     public boolean isMax(){
         return max;
+    }
+    
+    public ArrayList<Token> getTokens(){
+        return this.tokens;
+    }
+    public char[][] getBoard(){
+        return this.board;
     }
 
     /** 
