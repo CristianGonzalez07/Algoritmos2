@@ -21,7 +21,7 @@ subconjuntos (x:xs)= sub++[x:ys|ys<- sub]
 -}
 --O(n!)
 generateDelta :: [Int] ->[Char] -> Delta
-generateDelta xs ys = reverse [((r,t),p)|r <- xs, t<-ys, p<-xs]
+generateDelta xs ys = [((r,t),p)|r <- xs, t<-ys, p<-xs]
 
 
 
