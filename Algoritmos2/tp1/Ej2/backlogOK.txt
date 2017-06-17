@@ -1,0 +1,6 @@
+Sprint
+
+	  Actividad|Prioridad|  Costo|
+	Actividad 5|		3|		1|
+	Actividad 2|		3|		3|
+	Actividad 1|		2|		6|
