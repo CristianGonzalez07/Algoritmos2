@@ -1,15 +1,19 @@
 public class Token {
-  private String row;
+  private int row;
   private int column; 
-  private int color;
+  private char color;
 
-  public Token (String i, int j, int c){
+  /*
+   * Los colores posibles son: blanco = 'b', negro = 'n' y vacio = '_'
+  */
+  
+  public Token (int i, int j, char c){
     this.row = i;
     this.column=j;
     this.color=c;
   }
 
-  public String getRow(){
+  public int getRow(){
     return this.row;
   }
 
@@ -17,11 +21,11 @@ public class Token {
     return this.column;
   }
 
-  public int getColor(){
+  public char getColor(){
     return this.color;
   }
   
-  public void setRow(String i){
+  public void setRow(int i){
     this.row=i;
   }
 
@@ -29,7 +33,7 @@ public class Token {
     this.column=j;
   }
 
-  public void setColor(int c){
+  public void setColor(char c){
     this.color=c;
   }
   
