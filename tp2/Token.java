@@ -7,6 +7,12 @@ public class Token {
    * Los colores posibles son: blanco = 'b', negro = 'n' y vacio = '_'
   */
 
+  public Token(){
+    this.row = null;
+    this.column = null;
+    this.color = "";
+  }
+
   public Token (int i, int j, char c){
     this.row = i;
     this.column=j;

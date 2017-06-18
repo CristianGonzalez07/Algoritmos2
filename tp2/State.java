@@ -3,7 +3,7 @@ import java.util.Arrays;
 
 /*
     CONSIDERACIONES
- * Hay muchos comentarios que sacar, to te olvides de cambiar 
+ * Hay muchos comentarios que sacar, no te olvides de cambiar 
   *de tipo abstract a public
   * Trata de no pasar las 80 filas de codigo asi queda bien ordenado
   * 
@@ -13,11 +13,19 @@ import java.util.Arrays;
 
 
 public class State implements AdversarySearchState {
+    private State parent;
     private ArrayList<Token> tokens;
     private boolean max;
     //Cantidad de fichas jugadas por cada jugador
     private int tokensPlayer;
     private int tokensCpu;
+
+    public State(){
+        this.parent = null;
+        this.tokens = null;
+        this.tokensPlayer = 0;
+        this.tokensCpu = 0;
+    }
 
     /** 
      * Indicates whether the current state is a max state or not.
@@ -31,7 +39,8 @@ public class State implements AdversarySearchState {
     /*
      * La letra 'P' que acompaña a los parametros es para distinguirlos.   
     */
-    public State(ArrayList<Token> tokensP, boolean maxP,int tokensPlayerP,int tokensCPUP){
+    public State(ArrayList<Token> tokensP, boolean maxP,int tokensPlayerP,int tokensCPUP,State parentP){
+        this.parent = parentP;
         this.tokens =tokensP;
         this.max = maxP;
         this.tokensPlayer=tokensPlayerP;
@@ -55,12 +64,24 @@ public class State implements AdversarySearchState {
         return  this.tokensCPU;
     }
 
+    public State getParent(){
+        return this.parent;
+    }
+
+    public ArrayList<Token> setTokens(ArrayList<Token> tokensP){
+        this.tokens = tokensP;
+    }
+
     public void setTokensPlayer(int tplayer){
         this.tokensPlayer = tplayer;
     }
 
     public void setTokensCPU(int tCPU){
         this.tokensCPU = tCPU;
+    }
+
+    public void setParent(State parentP){
+        this.parent = parentP;
     }
 
     /** 
