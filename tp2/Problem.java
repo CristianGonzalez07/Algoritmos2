@@ -22,40 +22,40 @@ public class Problem implements AdversarySearchProblem{
      * @pre. state!=null.
      * @post. the list of successor states of state is returned.  
      */
-  public ArrayList<State> getSuccessors(State parent,char color) {
-    ArrayList<State> successors = new ArrayList<State>(); 
-    ArrayList<Token> parentTokens = parent.getTokens();
-    ArrayList<Token> childTokens = new ArrayList<Token>();
-    boolean max = !(parent.isMax());
-    int tokensPlayerP = parent.getTokensPlayer();
-    int tokensCPUP = parent.getTokensCPU();
-    State child = new State();
-    Token token = new Token(); 
-    for(int i=0:i<7;i++){
-        for(int j=0;j<7;j++){
-            token.setRow(i);
-            token.setRow(j);
-            token.setRow(color);
-            if (!(child.ocuppied(token)){
-                childTokens = parentTokens.clone();
-                childTokens.add(token);
-                child.setTokens(childTokens);
-                if(max){
-                    child.setTokensCPU(tokensCPUP+1);
-                    child.setTokensPlayer(tokensPlayerP);
-                }else{
-                    child.setTokensCPU(tokensCPUP);
-                    child.setTokensPlayer(tokensPlayerP);
+      public ArrayList<State> getSuccessors(State parent,char color) {
+        ArrayList<State> successors = new ArrayList<State>(); 
+        ArrayList<Token> parentTokens = parent.getTokens();
+        ArrayList<Token> childTokens = new ArrayList<Token>();
+        boolean max = !(parent.isMax());
+        int tokensPlayerP = parent.getTokensPlayer();
+        int tokensCPUP = parent.getTokensCPU();
+        State child = new State();
+        Token token = new Token(); 
+        for(int i=0:i<7;i++){
+            for(int j=0;j<7;j++){
+                token.setRow(i);
+                token.setRow(j);
+                token.setRow(color);
+                if (!(child.ocuppied(token)){
+                    childTokens = parentTokens.clone();
+                    childTokens.add(token);
+                    child.setTokens(childTokens);
+                    if(max){
+                        child.setTokensCPU(tokensCPUP+1);
+                        child.setTokensPlayer(tokensPlayerP);
+                    }else{
+                        child.setTokensCPU(tokensCPUP);
+                        child.setTokensPlayer(tokensPlayerP);
+                    }
+                    child.setParent(parent);
+                    successors.add(child);
                 }
-                child.setParent(parent);
-                successors.add(child);
             }
-        }
-    }   
-    return successors;
-  }
+        }   
+        return successors;
+      }
 
-    public int value(S state){//INPROCESS
+    public int value(S state){
         ArrayList<Token> tokens= state.getTokens();
         char [][] board=new char [7][7]; // los campos vacios son null
         //almacenamos
@@ -70,21 +70,24 @@ public class Problem implements AdversarySearchProblem{
             else
                 tokensCPU.add(t);
         }
-        
-        int res = ///////////////////////////////////////////////////////////////7
 
-        //Recuperamos el turno
-        boolean turno = state.isMax();
-        if (turno){
-            
+        if (endState(state,board,tokensPlayer,tokensCPU)) {
+
+            if (state.isMax())
+                return maxValue();
+            else
+                return minValue();
         }
+        
+        int res = Math.abs((distance(board, tokensCPU,'n')+distance(board, tokensPlayer,'b'))-((state.getTokensCPU())+(state.getTokensPlayer())));
 
+        return res;
 
 
     }
 
     //Calcula la distancia de una ficha a sus bandas
-    private int distance(char[][] board, ArrayList<Token> camino, char ficha){//INPROCESS
+    private int distance(char[][] board, ArrayList<Token> camino, char ficha){
         Token finicial= camino.get(0);
         Token ffinal = camino.get(camino.size()-1);
         //Componentes de finicial
@@ -141,17 +144,21 @@ public class Problem implements AdversarySearchProblem{
     }    
 
     //Devuelve tru si es un estado ganador
-    public boolean winner(){
-        return false;//hacer
+    public boolean endState(S state, char[][] board,ArrayList<Token>tplayer,ArrayList<Token>tCPU){
+        if (state.getTokensPlayer()==14 || state.getTokensCPU()==14)
+            return true;
+        if (distance(board, tplayer, 'b')==0 || distance(board, tCPU, 'n')==0)
+            return true;
+    return false;
     }
 
     //Devuelve el minimo valor de la euristica
     public int minValue(){
-        return 0; //hacer
+        return 14; 
     }
     //Devuelve el maximo valor de la euristica
     public int maxValue(){
-        return 10; //hacer
+        return 0; 
     }
 
 }
