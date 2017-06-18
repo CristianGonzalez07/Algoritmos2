@@ -11,6 +11,50 @@ public class Problem implements AdversarySearchProblem{
         return initial;
     }
 
+    /** 
+     * Returns the list of successor states for a given state, in the 
+     * context of the current problem. Concrete implementations of 
+     * AdversarySearchProblem must implement this routine, to indicate
+     * the 'advance' rules (or game rules) for the search.
+     * @param state is the state for which its successors are being 
+     * computed.
+     * @return the list of successor states of state.
+     * @pre. state!=null.
+     * @post. the list of successor states of state is returned.  
+     */
+  public ArrayList<State> getSuccessors(State parent,char color) {
+    ArrayList<State> successors = new ArrayList<State>(); 
+    ArrayList<Token> parentTokens = parent.getTokens();
+    ArrayList<Token> childTokens = new ArrayList<Token>();
+    boolean max = !(parent.isMax());
+    int tokensPlayerP = parent.getTokensPlayer();
+    int tokensCPUP = parent.getTokensCPU();
+    State child = new State();
+    Token token = new Token(); 
+    for(int i=0:i<7;i++){
+        for(int j=0;j<7;j++){
+            token.setRow(i);
+            token.setRow(j);
+            token.setRow(color);
+            if (!(child.ocuppied(token)){
+                childTokens = parentTokens.clone();
+                childTokens.add(token);
+                child.setTokens(childTokens);
+                if(max){
+                    child.setTokensCPU(tokensCPUP+1);
+                    child.setTokensPlayer(tokensPlayerP);
+                }else{
+                    child.setTokensCPU(tokensCPUP);
+                    child.setTokensPlayer(tokensPlayerP);
+                }
+                child.setParent(parent);
+                successors.add(child);
+            }
+        }
+    }   
+    return successors;
+  }
+
     public int value(S state){//INPROCESS
         ArrayList<Token> tokens= state.getTokens();
         char [][] board=new char [7][7]; // los campos vacios son null
