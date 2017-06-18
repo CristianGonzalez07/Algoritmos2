@@ -27,7 +27,7 @@ public class Problem implements AdversarySearchProblem{
                 tokensCPU.add(t);
         }
         
-        //
+        int res = ///////////////////////////////////////////////////////////////7
 
         //Recuperamos el turno
         boolean turno = state.isMax();
@@ -43,9 +43,16 @@ public class Problem implements AdversarySearchProblem{
     private int distance(char[][] board, ArrayList<Token> camino, char ficha){//INPROCESS
         Token finicial= camino.get(0);
         Token ffinal = camino.get(camino.size()-1);
-        if (ficha=='n'){
-            //in process
-        }
+        //Componentes de finicial
+        int ini = finicial.getColumn();
+        int inj = finicial.getRow();
+        //Componentes de ffinal
+        int fni = ffinal.getColumn();
+        int fnj = ffinal.getRow();
+        if (ficha=='n')
+            return ((recorridoNeg(board, ini, inj ,'n'))+(recorridoPos (board, fni, fnj ,'n')));
+        else
+            return ((recorridoNeg(board, fni, fnj ,'b'))+(recorridoPos (board, ini, inj ,'b')));
 
     }
 
