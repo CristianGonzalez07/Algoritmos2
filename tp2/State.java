@@ -84,6 +84,9 @@ public class State implements AdversarySearchState {
         this.parent = parentP;
     }
 
+    public Boolean ocuppied(Token token){
+    	return tokens.contains(token);
+    }
     /** 
      * Checks whether 'this' is equal to another state. 
      * @param other is the state to compare 'this' to.

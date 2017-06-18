@@ -22,7 +22,7 @@ public class Problem implements AdversarySearchProblem{
      * @pre. state!=null.
      * @post. the list of successor states of state is returned.  
      */
-      public ArrayList<State> getSuccessors(State parent,char color) {
+      public ArrayList<State> getSuccessors(State parent) {
         ArrayList<State> successors = new ArrayList<State>(); 
         ArrayList<Token> parentTokens = parent.getTokens();
         ArrayList<Token> childTokens = new ArrayList<Token>();
@@ -31,10 +31,16 @@ public class Problem implements AdversarySearchProblem{
         int tokensCPUP = parent.getTokensCPU();
         State child = new State();
         Token token = new Token(); 
+        Cahr color = '_';
         for(int i=0:i<7;i++){
             for(int j=0;j<7;j++){
                 token.setRow(i);
                 token.setRow(j);
+                if(max){
+                	color = 'n';
+                }else{
+                	color = 'b';
+                }
                 token.setRow(color);
                 if (!(child.ocuppied(token)){
                     childTokens = parentTokens.clone();
