@@ -1,13 +1,12 @@
 import java.util.Arrays;
 import java.util.ArrayList;
 
-public class Problem implements AdversarySearchProblem{ 
+public class Problem implements AdversarySearchProblem<State> { 
     
-
     //
-    public S initialState(){
+    public State initialState(){
         ArrayList<Token> tokens= new ArrayList<Token>();
-        State initial= new State(tokens,false,0,0);
+        State initial= new State(tokens,false,0,0,null);
         return initial;
     }
 
@@ -22,7 +21,7 @@ public class Problem implements AdversarySearchProblem{
      * @pre. state!=null.
      * @post. the list of successor states of state is returned.  
      */
-      public ArrayList<State> getSuccessors(State parent,char color) {
+      public ArrayList<State> getSuccessors(State parent) {
         ArrayList<State> successors = new ArrayList<State>(); 
         ArrayList<Token> parentTokens = parent.getTokens();
         ArrayList<Token> childTokens = new ArrayList<Token>();
@@ -31,12 +30,17 @@ public class Problem implements AdversarySearchProblem{
         int tokensCPUP = parent.getTokensCPU();
         State child = new State();
         Token token = new Token(); 
-        for(int i=0:i<7;i++){
+        char color ='_';
+        for(int i=0;i<7;i++){
             for(int j=0;j<7;j++){
                 token.setRow(i);
                 token.setRow(j);
+                if (max) 
+                    color = 'n';                    
+                else
+                    color ='b';
                 token.setRow(color);
-                if (!(child.ocuppied(token)){
+                if (!(child.ocuppied(token))){
                     childTokens = parentTokens.clone();
                     childTokens.add(token);
                     child.setTokens(childTokens);
@@ -55,7 +59,7 @@ public class Problem implements AdversarySearchProblem{
         return successors;
       }
 
-    public int value(S state){
+    public int value(State state){
         ArrayList<Token> tokens= state.getTokens();
         char [][] board=new char [7][7]; // los campos vacios son null
         //almacenamos
@@ -82,7 +86,6 @@ public class Problem implements AdversarySearchProblem{
         int res = Math.abs((distance(board, tokensCPU,'n')+distance(board, tokensPlayer,'b'))-((state.getTokensCPU())+(state.getTokensPlayer())));
 
         return res;
-
 
     }
 
@@ -144,7 +147,8 @@ public class Problem implements AdversarySearchProblem{
     }    
 
     //Devuelve tru si es un estado ganador
-    public boolean endState(S state, char[][] board,ArrayList<Token>tplayer,ArrayList<Token>tCPU){
+    @Override
+    private boolean endState(State state, char[][] board,ArrayList<Token>tplayer,ArrayList<Token>tCPU){
         if (state.getTokensPlayer()==14 || state.getTokensCPU()==14)
             return true;
         if (distance(board, tplayer, 'b')==0 || distance(board, tCPU, 'n')==0)
