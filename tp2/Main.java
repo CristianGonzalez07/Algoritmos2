@@ -19,7 +19,7 @@ public class Main {
         }
     }
 
-    public static State playerPlays(State state)throws Exception{
+    public static State playerPlays(State state) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Boolean exception = true;
         State insert = new State();
@@ -41,16 +41,18 @@ public class Main {
                         System.out.println("Ficha Ingresada Correctamente");
                     }
                 }
+
             }catch(Exception e){
                 exception = true;
                 System.out.println("Ingreso Invalido");
+
             }
         }
         return state;
     }
 
     public static void showGame(State state){
-        char [][] board;
+        char [][] board = new char [7][7];
         for (char[] row: board)
             Arrays.fill(row, '_');
         for (Token t: state.getTokens())
@@ -68,7 +70,7 @@ public class Main {
         State actualState = problem.initialState();
         int depth = 4;//a eleccion
         Boolean turn = true;//turno del jugador?
-        MinMaxAlphaBetaEngine minMaxEngine = new MinMaxAlphaBetaEngine(problem,depth);
+        MinMaxAlphaBetaEngine<Problem,State>minMaxEngine = new MinMaxAlphaBetaEngine<Problem,State>(problem,depth);
         while(!(problem.end(actualState))){
             showGame(actualState);
             if(turn){
