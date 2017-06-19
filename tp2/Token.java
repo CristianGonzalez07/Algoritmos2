@@ -8,9 +8,9 @@ public class Token {
   */
 
   public Token(){
-    this.row = null;
-    this.column = null;
-    this.color = "";
+    this.row = -1;
+    this.column = -1;
+    this.color = '_';
   }
 
   public Token (int i, int j, char c){
@@ -42,6 +42,8 @@ public class Token {
   public void setColor(char c){
     this.color=c;
   }
-  
+  public String toString(){
+    return ("("+this.row+","+this.column+","+this.color+")");
+  }
 
 }

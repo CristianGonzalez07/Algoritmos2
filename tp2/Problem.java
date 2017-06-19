@@ -4,6 +4,8 @@ import java.util.ArrayList;
 public class Problem implements AdversarySearchProblem<State> { 
     
     //
+    public Problem(){}
+
     public State initialState(){
         ArrayList<Token> tokens= new ArrayList<Token>();
         State initial= new State(tokens,false,0,0,null);
@@ -27,7 +29,7 @@ public class Problem implements AdversarySearchProblem<State> {
         ArrayList<Token> childTokens = new ArrayList<Token>();
         boolean max = !(parent.isMax());
         int tokensPlayerP = parent.getTokensPlayer();
-        int tokensCPUP = parent.getTokensCPU();
+        int tokensCpuP = parent.getTokensCpu();
         State child = new State();
         Token token = new Token(); 
         char color ='_';
@@ -45,10 +47,10 @@ public class Problem implements AdversarySearchProblem<State> {
                     childTokens.add(token);
                     child.setTokens(childTokens);
                     if(max){
-                        child.setTokensCPU(tokensCPUP+1);
+                        child.setTokensCpu(tokensCpuP+1);
                         child.setTokensPlayer(tokensPlayerP);
                     }else{
-                        child.setTokensCPU(tokensCPUP);
+                        child.setTokensCpu(tokensCpuP);
                         child.setTokensPlayer(tokensPlayerP);
                     }
                     child.setParent(parent);
@@ -64,7 +66,9 @@ public class Problem implements AdversarySearchProblem<State> {
         char [][] board=new char [7][7]; // los campos vacios son null
         //almacenamos
         ArrayList<Token> tokensPlayer;
-        ArrayList<Token> tokensCPU;
+        ArrayList<Token> tokensCpu;
+        for (char[] row: board)
+            Arrays.fill(row, '_');
         for (Token t: tokens){
             // llenamos la matriz con los tokens
             board[t.getRow()][t.getColumn()]=t.getColor();
@@ -72,10 +76,10 @@ public class Problem implements AdversarySearchProblem<State> {
             if (t.getColor()=='b')
                 tokensPlayer.add(t);
             else
-                tokensCPU.add(t);
+                tokensCpu.add(t);
         }
-
-        if (endState(state,board,tokensPlayer,tokensCPU)) {
+        //if (endState(state,board,tokensPlayer,tokensCpu)) {
+        if (end(state)) {
 
             if (state.isMax())
                 return maxValue();
@@ -83,7 +87,7 @@ public class Problem implements AdversarySearchProblem<State> {
                 return minValue();
         }
         
-        int res = Math.abs((distance(board, tokensCPU,'n')+distance(board, tokensPlayer,'b'))-((state.getTokensCPU())+(state.getTokensPlayer())));
+        int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b'))-((state.getTokensCpu())+(state.getTokensPlayer())));
 
         return res;
 
@@ -113,15 +117,15 @@ public class Problem implements AdversarySearchProblem<State> {
         if(j==6){
             return 0;
         }else{
-            if (board[i][j+1]== null) // si la siguiente posicion esta vacia
+            if (board[i][j+1]== '_') // si la siguiente posicion esta vacia
                 return (1+ recorridoPos (board, i,j+1,ficha));
             else
                 if (board[i][j+1]==ficha) //si la siguiente es del mismo tipo de ficha
                     return recorridoPos (board, i,j+1,ficha);
                 else
-                    if ((board[i-1][j]!=ficha) && (board[i+1][j]==null)&&((i+1)<=6))
+                    if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_')&&((i+1)<=6))
                         return (1+ recorridoPos (board, i+1,j,ficha));
-                    if ((board[i+1][j]!=ficha) && (board[i-1][j]==null)&&((i-1)>=0))
+                    if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_')&&((i-1)>=0))
                         return (1+ recorridoPos (board, i-1,j,ficha));
         } 
     }
@@ -133,27 +137,35 @@ public class Problem implements AdversarySearchProblem<State> {
         if(j==0){
             return 0;
         }else{
-            if (board[i][j-1]== null) // si la siguiente posicion esta vacia
+            if (board[i][j-1]== '_') // si la siguiente posicion esta vacia
                 return (1+ recorridoPos (board, i,j-1,ficha));
             else
                 if (board[i][j-1]==ficha) //si la siguiente es del mismo tipo de ficha
                     return recorridoPos (board, i,j-1,ficha);
                 else
-                    if ((board[i-1][j]!=ficha) && (board[i+1][j]==null)&&((i+1)<=6))
+                    if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_')&&((i+1)<=6))
                         return (1+ recorridoPos (board, i+1,j,ficha));
-                    if ((board[i+1][j]!=ficha) && (board[i-1][j]==null)&&((i-1)>=0))
+                    if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_')&&((i-1)>=0))
                         return (1+ recorridoPos (board, i-1,j,ficha));
         } 
     }    
 
+    /*
     //Devuelve tru si es un estado ganador
-    @Override
-    private boolean endState(State state, char[][] board,ArrayList<Token>tplayer,ArrayList<Token>tCPU){
-        if (state.getTokensPlayer()==14 || state.getTokensCPU()==14)
+    public boolean end(State state, char[][] board,ArrayList<Token>tplayer,ArrayList<Token>tCpu){
+        if (state.getTokensPlayer()==14 || state.getTokensCpu()==14)
             return true;
-        if (distance(board, tplayer, 'b')==0 || distance(board, tCPU, 'n')==0)
+        if (distance(board, tplayer, 'b')==0 || distance(board, tCpu, 'n')==0)
             return true;
     return false;
+    }
+    */
+
+    //Devuelve true si es un estado final
+    public boolean end(State state){
+        if (state.getTokensPlayer()==14 || state.getTokensCpu()==14)
+            return true;
+        return false;
     }
 
     //Devuelve el minimo valor de la euristica

@@ -1,16 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/*
-    CONSIDERACIONES
- * Hay muchos comentarios que sacar, no te olvides de cambiar 
-  *de tipo abstract a public
-  * Trata de no pasar las 80 filas de codigo asi queda bien ordenado
-  * 
-  *Para clonar una matriz en la api de Arrays hay un ".clone"
-*/
-
-
 
 public class State implements AdversarySearchState {
     private State parent;
@@ -39,12 +29,12 @@ public class State implements AdversarySearchState {
     /*
      * La letra 'P' que acompaña a los parametros es para distinguirlos.   
     */
-    public State(ArrayList<Token> tokensP, boolean maxP,int tokensPlayerP,int tokensCPUP,State parentP){
+    public State(ArrayList<Token> tokensP, boolean maxP,int tokensPlayerP,int tokensCpuP,State parentP){
         this.parent = parentP;
         this.tokens =tokensP;
         this.max = maxP;
         this.tokensPlayer=tokensPlayerP;
-        this.tokensCPU=tokensPlayerP;
+        this.tokensCpu=tokensCpuP;
     }
 
 
@@ -60,8 +50,8 @@ public class State implements AdversarySearchState {
         return  this.tokensPlayer;
     }
 
-    public int getTokensCPU(){
-        return  this.tokensCPU;
+    public int getTokensCpu(){
+        return  this.tokensCpu;
     }
 
     public State getParent(){
@@ -76,8 +66,8 @@ public class State implements AdversarySearchState {
         this.tokensPlayer = tplayer;
     }
 
-    public void setTokensCPU(int tCPU){
-        this.tokensCPU = tCPU;
+    public void setTokensCpu(int tCPU){
+        this.tokensCpu = tCPU;
     }
 
     public void setParent(State parentP){
@@ -96,7 +86,7 @@ public class State implements AdversarySearchState {
      * to 'other'.
      */
      public boolean equals(State other){
-        return ((max == max)&&((this.tokens).equals(other)));
+        return ((max == max)&&((this.tokens).equals(other.getTokens())));
     }
 
     /** 
@@ -105,10 +95,19 @@ public class State implements AdversarySearchState {
      * @pre. true.
      * @post. A text representation of the current state is returned.
      */
-     /*
-    abstract public String toString();
-    */
-
+     
+     public String toString(){
+        //String padre= this.parent.toString();
+        String max = "Es maximo: "+this.max+" ";
+        String fichas= "Cant. fichas 'b' : "+this.tokensPlayer +" Cant. fichas 'n' : "+this.tokensCpu+"\n";
+        String acum="";
+        for(int i=0;i<this.tokens.size();i++) {
+          acum+=","+this.tokens.get(i).toString();
+        }
+        String listaT="Los tokens son: \n"+acum;
+        return (max+fichas+listaT);
+     }
+    
     /** 
      * Returns an object representing the rule applied, leading to the
      * current state. 

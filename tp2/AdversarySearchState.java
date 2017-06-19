@@ -49,7 +49,7 @@ public interface AdversarySearchState {
 	 * then null is returned.
 	 * TODO Replace Object by a more specific class or interface.
 	 */
-	abstract Object ruleApplied();
+	//abstract Object ruleApplied();
 	
 }
 
