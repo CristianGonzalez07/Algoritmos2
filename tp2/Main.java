@@ -10,26 +10,25 @@ public class Main {
   */
 
   //
-   private static State tokensInBoard;
+   private static State actualState;
 
     public static Boolean insertToken(int i,int j,char color){
         Token token = new Token(i,j,color);
-        if(!(tokensInBoard.ocuppied(token))){
+        if(!(actualState.ocuppied(token))){
             ArrayList<Token> tokens = new ArrayList<Token>();
-            if(tokensInBoard.getTokens() != null){
-                tokens = tokensInBoard.getTokens();    
+            if(actualState.getTokens() != null){
+                tokens = actualState.getTokens();    
             } 
             tokens.add(token);
-            tokensInBoard.setTokens(tokens);
+            actualState.setTokens(tokens);
             return true;        
         }else{
             return false;
         }
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void playerPlays()throws Exception{
         Boolean exception = true;
-        tokensInBoard = new State();
         while(exception){
             try{
                 exception = false;
@@ -55,6 +54,24 @@ public class Main {
                 System.out.println("Ingreso Invalido");
             }
         }
+    }
+
+    public static void showGame(State state){
+        char [][] board;
+        for (char[] row: board)
+            Arrays.fill(row, '_');
+        for (Token t: state.getTokens())
+            board[t.getRow()][t.getColumn()]=t.getColor();
+        for ( int i=0;i<7;i++) {
+            for (int j =0;j<7 ;j++ ) {
+                System.out.print(board[i][j]+" ");
+            }
+        System.out.println("");
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
+       actualState = new State();
     }
   
 }
