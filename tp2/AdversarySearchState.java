@@ -27,7 +27,7 @@ public interface AdversarySearchState {
 	 * @post. true is returned iff 'this' is equal, as a state, 
 	 * to 'other'.
 	 */
-	abstract public boolean equals(AdversarySearchState other);
+	//abstract public boolean equals(AdversarySearchState other);
 
 	/** 
 	 * Returns a representation as a string of the current state. 

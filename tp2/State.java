@@ -58,7 +58,7 @@ public class State implements AdversarySearchState {
         return this.parent;
     }
 
-    public ArrayList<Token> setTokens(ArrayList<Token> tokensP){
+    public void setTokens(ArrayList<Token> tokensP){
         this.tokens = tokensP;
     }
 
