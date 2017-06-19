@@ -1,49 +1,41 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
-  /*
-   *Metodos que faltan
-   +Obtener jugada
-   +mostrar tablero
-   +
-  */
-
-  //
-   private static State actualState;
-
-    public static Boolean insertToken(int i,int j,char color){
+ 
+    public static State insertToken(int i,int j,char color,State state){
         Token token = new Token(i,j,color);
-        if(!(actualState.ocuppied(token))){
+        if(!(state.ocuppied(token))){
             ArrayList<Token> tokens = new ArrayList<Token>();
-            if(actualState.getTokens() != null){
-                tokens = actualState.getTokens();    
+            if(state.getTokens() != null){
+                tokens = state.getTokens();    
             } 
             tokens.add(token);
-            actualState.setTokens(tokens);
-            return true;        
+            state.setTokens(tokens);
+            return state;        
         }else{
-            return false;
+            return null;
         }
     }
 
-    public static void playerPlays()throws Exception{
+    public static State playerPlays(State state)throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Boolean exception = true;
+        State insert = new State();
+        int fila = 0;
+        int columna = 0;
         while(exception){
             try{
                 exception = false;
-                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                Boolean insert = false;
-                int fila = 0;
-                int columna = 0;
-                while(!insert){
+                while(insert == null){
                     System.out.println("Ingrese La ficha");
                     System.out.println("Pos i :");
                     fila = Integer.parseInt(br.readLine());
                     System.out.println("Pos j :");
                     columna = Integer.parseInt(br.readLine());
-                    insert = insertToken(fila,columna,'b');
-                    if(!insert){
+                    insert = insertToken(fila,columna,'b',state);
+                    if(insert == null){
                         System.out.println("No se puede ingresar en esa posicion.Ingrese una posicion valida o no ocupada");
                     }else{
                         System.out.println("Ficha Ingresada Correctamente");
@@ -54,6 +46,7 @@ public class Main {
                 System.out.println("Ingreso Invalido");
             }
         }
+        return state;
     }
 
     public static void showGame(State state){
@@ -70,8 +63,28 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws Exception{
-       actualState = new State();
+    public static void main(String[] args){
+        Problem problem = new Problem();
+        State actualState = problem.initialState();
+        int depth = 4;//a eleccion
+        Boolean turn = true;//turno del jugador?
+        MinMaxAlphaBetaEngine minMaxEngine = new MinMaxAlphaBetaEngine(problem,depth);
+        while(!(problem.end(actualState))){
+            showGame(actualState);
+            if(turn){
+                actualState = playerPlays(actualState);
+            }else{
+                actualState = minMaxEngine.computeSuccessor(actualState);
+            }
+        }
+        showGame(actualState);
+        /* ver valoracion de ganador
+        if(problem.value(actualState) < 0){
+            System.out.println("GANO EL JUGADOR!!!");
+        }else{
+            System.out.println("GANO LA MAQUINA!!!");
+        }
+        */
+     
     }
-  
 }
