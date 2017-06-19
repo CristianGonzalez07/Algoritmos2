@@ -75,7 +75,12 @@ public class State implements AdversarySearchState {
     }
 
     public Boolean ocuppied(Token token){
-    	return tokens.contains(token);
+        if(tokens == null){
+            return false;
+        }else{
+            return tokens.contains(token);    
+        }
+    	
     }
     /** 
      * Checks whether 'this' is equal to another state. 
