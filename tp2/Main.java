@@ -21,33 +21,28 @@ public class Main {
 
     public static State playerPlays(State state) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        Boolean exception = true;
         State insert = new State();
         int fila = 0;
         int columna = 0;
-        while(exception){
-            try{
-                exception = false;
-                while(insert == null){
-                    System.out.println("Ingrese La ficha");
-                    System.out.println("Pos i :");
-                    fila = Integer.parseInt(br.readLine());
-                    System.out.println("Pos j :");
-                    columna = Integer.parseInt(br.readLine());
-                    insert = insertToken(fila,columna,'b',state);
-                    if(insert == null){
-                        System.out.println("No se puede ingresar en esa posicion.Ingrese una posicion valida o no ocupada");
-                    }else{
-                        System.out.println("Ficha Ingresada Correctamente");
-                    }
+        try{
+            while(insert == null){
+                System.out.println("Ingrese La ficha");
+                System.out.println("Pos i :");
+                fila = Integer.parseInt(br.readLine());
+                System.out.println("Pos j :");
+                columna = Integer.parseInt(br.readLine());
+                insert = insertToken(fila,columna,'b',state);
+                if(insert == null){
+                    System.out.println("No se puede ingresar en esa posicion.Ingrese una posicion valida o no ocupada");
+                }else{
+                    System.out.println("Ficha Ingresada Correctamente");
                 }
-
-            }catch(Exception e){
-                exception = true;
-                System.out.println("Ingreso Invalido");
-
             }
+        }catch(Exception e){
+            System.out.println("Ingreso Invalido");
+            playerPlays(state);
         }
+        
         return state;
     }
 
@@ -65,19 +60,23 @@ public class Main {
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
         Problem problem = new Problem();
         State actualState = problem.initialState();
         int depth = 4;//a eleccion
         Boolean turn = true;//turno del jugador?
         MinMaxAlphaBetaEngine<Problem,State>minMaxEngine = new MinMaxAlphaBetaEngine<Problem,State>(problem,depth);
-        while(!(problem.end(actualState))){
-            showGame(actualState);
-            if(turn){
-                actualState = playerPlays(actualState);
-            }else{
-                actualState = minMaxEngine.computeSuccessor(actualState);
-            }
+        try{
+            while(!(problem.end(actualState))){
+                showGame(actualState);
+                if(turn){
+                    actualState = playerPlays(actualState);
+                }else{
+                    actualState = minMaxEngine.computeSuccessor(actualState);
+                }
+            } 
+        }catch(Exception e){
+            System.out.println(e);
         }
         showGame(actualState);
         /* ver valoracion de ganador
