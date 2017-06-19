@@ -14,7 +14,7 @@ public class Main {
             } 
             tokens.add(token);
             state.setTokens(tokens);
-            state.setTokensPlayer(state.getTokensPlayer()+1);
+            state.setTokensPlayer(state.cantTokensPlayer()+1);
             return state;        
         }else{
             return null;
@@ -49,11 +49,7 @@ public class Main {
     }
 
     public static void showGame(State state){
-        char [][] board = new char [7][7];
-        for (char[] row: board)
-            Arrays.fill(row, '_');
-        for (Token t: state.getTokens())
-            board[t.getRow()][t.getColumn()]=t.getColor();
+        char [][] board = state.generateBoard();
         for ( int i=0;i<7;i++) {
             for (int j =0;j<7 ;j++ ) {
                 System.out.print(board[i][j]+" ");
@@ -69,6 +65,7 @@ public class Main {
         Boolean turn = true;//turno del jugador?
         MinMaxAlphaBetaEngine<Problem,State>minMaxEngine = new MinMaxAlphaBetaEngine<Problem,State>(problem,depth);
         try{
+            System.out.println("***************************************");
             while(!(problem.end(actualState))){
                 System.out.println("===================");
                 showGame(actualState);

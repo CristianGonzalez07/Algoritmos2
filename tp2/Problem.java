@@ -28,8 +28,8 @@ public class Problem implements AdversarySearchProblem<State> {
         ArrayList<Token> parentTokens = parent.getTokens();
         ArrayList<Token> childTokens = new ArrayList<Token>();
         boolean max = !(parent.isMax());
-        int tokensPlayerP = parent.getTokensPlayer();
-        int tokensCpuP = parent.getTokensCpu();
+        int tokensPlayerP = parent.cantTokensPlayer();
+        int tokensCpuP = parent.cantTokensCpu();
         State child = new State();
         Token token = new Token(); 
         char color ='_';
@@ -64,22 +64,11 @@ public class Problem implements AdversarySearchProblem<State> {
 
     public int value(State state){
         ArrayList<Token> tokens= state.getTokens();
-        char [][] board=new char [7][7]; // los campos vacios son null
+        char [][] board = state.generateBoard();
         //almacenamos
-        ArrayList<Token> tokensPlayer = new ArrayList<Token>();
-        ArrayList<Token> tokensCpu = new ArrayList<Token>();
-        for (char[] row: board)
-            Arrays.fill(row, '_');
-        for (Token t: tokens){
-            // llenamos la matriz con los tokens
-            board[t.getRow()][t.getColumn()]=t.getColor();
-            //Obtenenmos la lista de los tokens de cada jugador en cuestion
-            if (t.getColor()=='b')
-                tokensPlayer.add(t);
-            else
-                tokensCpu.add(t);
-        }
-        //if (endState(state,board,tokensPlayer,tokensCpu)) {
+        ArrayList<Token> tokensPlayer = state.getTokensPlayer(); 
+        ArrayList<Token> tokensCpu = state.getTokensCpu();
+
         if (end(state)) {
 
             if (state.isMax())
@@ -88,7 +77,7 @@ public class Problem implements AdversarySearchProblem<State> {
                 return minValue();
         }
         
-        int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b'))-((state.getTokensCpu())+(state.getTokensPlayer())));
+        int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b'))-((state.cantTokensCpu())+(state.cantTokensPlayer())));
 
         return res;
 
@@ -96,19 +85,21 @@ public class Problem implements AdversarySearchProblem<State> {
 
     //Calcula la distancia de una ficha a sus bandas
     private int distance(char[][] board, ArrayList<Token> camino, char ficha){
-        Token finicial= camino.get(0);
-        Token ffinal = camino.get(camino.size()-1);
-        //Componentes de finicial
-        int ini = finicial.getColumn();
-        int inj = finicial.getRow();
-        //Componentes de ffinal
-        int fni = ffinal.getColumn();
-        int fnj = ffinal.getRow();
-        if (ficha=='n')
-            return ((recorridoNeg(board, ini, inj ,'n'))+(recorridoPos (board, fni, fnj ,'n')));
-        else
-            return ((recorridoNeg(board, fni, fnj ,'b'))+(recorridoPos (board, ini, inj ,'b')));
-
+        if (camino.size()!=0) {
+          Token finicial= camino.get(0);
+          Token ffinal = camino.get(camino.size()-1);
+          //Componentes de finicial
+          int ini = finicial.getColumn();
+          int inj = finicial.getRow();
+          //Componentes de ffinal
+          int fni = ffinal.getColumn();
+          int fnj = ffinal.getRow();
+          if (ficha=='n')
+              return ((recorridoNeg(board, ini, inj ,'n'))+(recorridoPos (board, fni, fnj ,'n')));
+          else
+              return ((recorridoNeg(board, fni, fnj ,'b'))+(recorridoPos (board, ini, inj ,'b')));
+        }
+        return 7;
     }
 
     /*Desde el nodo hasta su banda de llegada
@@ -153,20 +144,24 @@ public class Problem implements AdversarySearchProblem<State> {
         return maxValue(); 
     }    
 
-    /*
-    //Devuelve tru si es un estado ganador
-    public boolean end(State state, char[][] board,ArrayList<Token>tplayer,ArrayList<Token>tCpu){
-        if (state.getTokensPlayer()==14 || state.getTokensCpu()==14)
-            return true;
-        if (distance(board, tplayer, 'b')==0 || distance(board, tCpu, 'n')==0)
-            return true;
-    return false;
-    }
+
+     /*
+     * @pre. state!=null.
+     * @post. true is returned iff state is an end state.  
     */
-    //Devuelve true si es un estado final
     public boolean end(State state){
-        if (state.getTokensPlayer()==14 || state.getTokensCpu()==14)
+        if (state.cantTokensPlayer()==14 || state.cantTokensCpu()==14)
             return true;
+        ArrayList<Token> tokensPlayer = state.getTokensPlayer(); 
+        ArrayList<Token> tokensCpu = state.getTokensCpu();
+        char[][] board = state.generateBoard();
+        int cantTP = state.cantTokensPlayer();
+        int cantTC = state.cantTokensCpu();
+        int distP = distance(board,tokensPlayer,'b');
+        int distC = distance(board,tokensCpu,'n');
+        if (((distP==0) || (distC==0)) && ((cantTP>0) || (cantTC>0)))
+            return true;
+          
         return false;
     }
 

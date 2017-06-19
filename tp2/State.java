@@ -45,17 +45,65 @@ public class State implements AdversarySearchState {
     public ArrayList<Token> getTokens(){
         return this.tokens;
     }
-
-    public int getTokensPlayer(){
+    /*
+     *@pre. true
+     *@post. retorna la cantidad de tokens del Player.
+    */
+    public int cantTokensPlayer(){
         return  this.tokensPlayer;
     }
-
-    public int getTokensCpu(){
+    /*
+     *@pre. true
+     *@post. retorna la cantidad de tokens del Cpu.
+    */
+    public int cantTokensCpu(){
         return  this.tokensCpu;
     }
-
+    /*
+     *@pre. true
+     *@post. retorna el estado que precede al token actual.
+    */
     public State getParent(){
         return this.parent;
+    }
+
+    /*
+     *@pre. true
+     *@post. retorna los tokens del Player
+    */
+    public ArrayList<Token> getTokensPlayer(){
+      ArrayList<Token> tokensPlayer =new ArrayList<Token>();
+      for (Token t: this.tokens){
+        if (t.getColor()=='b')
+            tokensPlayer.add(t);
+      }
+      return tokensPlayer;
+    }
+
+    /*
+     *@pre. true
+     *@post. retorna los tokens del Cpu
+    */
+    public ArrayList<Token> getTokensCpu(){
+      ArrayList<Token> tokensCpu =new ArrayList<Token>();
+      for (Token t: this.tokens){
+        if (t.getColor()=='n')
+            tokensCpu.add(t);
+      }
+      return tokensCpu;
+    }
+    /*
+     *@pre. true
+     *@post. retorna el tablero del estado actual.
+    */
+    public char[][]  generateBoard(){
+      char [][] board=new char [7][7];
+      for (char[] row: board)
+                  Arrays.fill(row, '_');
+      for (Token t: this.tokens)
+          // llenamos la matriz con los tokens
+          board[t.getRow()][t.getColumn()]=t.getColor();
+      return board;
     }
 
     public void setTokens(ArrayList<Token> tokensP){
