@@ -5,14 +5,16 @@ import java.util.Arrays;
 public class Main {
  
     public static State insertToken(int i,int j,char color,State state){
-        Token token = new Token(i,j,color);
-        if(!(state.ocuppied(token))){
+        Token token = new Token();
+        if(!(state.ocuppied(i,j))){
+            token = new Token(i,j,color);
             ArrayList<Token> tokens = new ArrayList<Token>();
             if(state.getTokens() != null){
                 tokens = state.getTokens();    
             } 
             tokens.add(token);
             state.setTokens(tokens);
+            state.setTokensPlayer(state.getTokensPlayer()+1);
             return state;        
         }else{
             return null;
@@ -25,7 +27,7 @@ public class Main {
         int fila = 0;
         int columna = 0;
         try{
-            while(insert == null){
+            while(insert.getTokens() == null){
                 System.out.println("Ingrese La ficha");
                 System.out.println("Pos i :");
                 fila = Integer.parseInt(br.readLine());
@@ -63,21 +65,26 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Problem problem = new Problem();
         State actualState = problem.initialState();
-        int depth = 4;//a eleccion
+        int depth = 2;//a eleccion
         Boolean turn = true;//turno del jugador?
         MinMaxAlphaBetaEngine<Problem,State>minMaxEngine = new MinMaxAlphaBetaEngine<Problem,State>(problem,depth);
         try{
             while(!(problem.end(actualState))){
+                System.out.println("===================");
                 showGame(actualState);
-                if(turn){
+                if(turn){   
                     actualState = playerPlays(actualState);
+                    System.out.println(actualState.toString());
                 }else{
                     actualState = minMaxEngine.computeSuccessor(actualState);
+                    System.out.println(actualState.toString());
                 }
+                turn = !turn;//cambiar de turno
             } 
         }catch(Exception e){
             System.out.println(e);
         }
+        System.out.println("&&&&&&&&&&&&&&&&&&&&");
         showGame(actualState);
         /* ver valoracion de ganador
         if(problem.value(actualState) < 0){

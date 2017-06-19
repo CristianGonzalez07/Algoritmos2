@@ -61,6 +61,7 @@ public class MinMaxAlphaBetaEngine<P extends AdversarySearchProblem<S>, S extend
 		best = successors.remove(0);
 		bestValue = computeValue(best);
 		for(S child : successors){
+			//System.out.println("Cicle");			
 			int value = computeValue(child);
 			if (max){
 				if(value > bestValue){

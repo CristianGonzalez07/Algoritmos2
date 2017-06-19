@@ -72,13 +72,20 @@ public class State implements AdversarySearchState {
 
     public void setParent(State parentP){
         this.parent = parentP;
+        if(parent.isMax()){
+            this.max = false; 
+        }else{
+            this.max = true;
+        }
     }
 
-    public Boolean ocuppied(Token token){
+    public Boolean ocuppied(int i,int j){
         if(tokens == null){
             return false;
         }else{
-            return tokens.contains(token);    
+            Token token1 = new Token(i,j,'b');
+            Token token2 = new Token(i,j,'n'); 
+            return (tokens.contains(token1)||tokens.contains(token1));    
         }
     	
     }
@@ -90,6 +97,7 @@ public class State implements AdversarySearchState {
      * @post. true is returned iff 'this' is equal, as a state, 
      * to 'other'.
      */
+    /*
      public boolean equals(State other){
         boolean containT= false;
         for (Token t : other.getTokens()) {
@@ -100,7 +108,8 @@ public class State implements AdversarySearchState {
         }
         return ((max == max)&& containT);
     }
-
+    */
+    
     /** 
      * Returns a representation as a string of the current state. 
      * @return a string representing the current state.

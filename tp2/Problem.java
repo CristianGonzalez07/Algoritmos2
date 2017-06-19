@@ -36,13 +36,13 @@ public class Problem implements AdversarySearchProblem<State> {
         for(int i=0;i<7;i++){
             for(int j=0;j<7;j++){
                 token.setRow(i);
-                token.setRow(j);
+                token.setColumn(j);
                 if (max) 
                     color = 'n';                    
                 else
                     color ='b';
-                token.setRow(color);
-                if (!(child.ocuppied(token))){
+                token.setColor(color);
+                if (!(child.ocuppied(i,j))){
                     //childTokens = parentTokens.clone();
                     childTokens = cloneList(parentTokens);
                     childTokens.add(token);
@@ -52,7 +52,7 @@ public class Problem implements AdversarySearchProblem<State> {
                         child.setTokensPlayer(tokensPlayerP);
                     }else{
                         child.setTokensCpu(tokensCpuP);
-                        child.setTokensPlayer(tokensPlayerP);
+                        child.setTokensPlayer(tokensPlayerP+1);
                     }
                     child.setParent(parent);
                     successors.add(child);
