@@ -86,7 +86,14 @@ public class State implements AdversarySearchState {
      * to 'other'.
      */
      public boolean equals(State other){
-        return ((max == max)&&((this.tokens).equals(other.getTokens())));
+        boolean containT= false;
+        for (Token t : other.getTokens()) {
+            if (ocuppied(t)){
+                containT=true;
+                break;
+            }
+        }
+        return ((max == max)&& containT);
     }
 
     /** 

@@ -43,7 +43,8 @@ public class Problem implements AdversarySearchProblem<State> {
                     color ='b';
                 token.setRow(color);
                 if (!(child.ocuppied(token))){
-                    childTokens = parentTokens.clone();
+                    //childTokens = parentTokens.clone();
+                    childTokens = cloneList(parentTokens);
                     childTokens.add(token);
                     child.setTokens(childTokens);
                     if(max){
@@ -65,8 +66,8 @@ public class Problem implements AdversarySearchProblem<State> {
         ArrayList<Token> tokens= state.getTokens();
         char [][] board=new char [7][7]; // los campos vacios son null
         //almacenamos
-        ArrayList<Token> tokensPlayer;
-        ArrayList<Token> tokensCpu;
+        ArrayList<Token> tokensPlayer = new ArrayList<Token>();
+        ArrayList<Token> tokensCpu = new ArrayList<Token>();
         for (char[] row: board)
             Arrays.fill(row, '_');
         for (Token t: tokens){
@@ -127,7 +128,8 @@ public class Problem implements AdversarySearchProblem<State> {
                         return (1+ recorridoPos (board, i+1,j,ficha));
                     if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_')&&((i-1)>=0))
                         return (1+ recorridoPos (board, i-1,j,ficha));
-        } 
+        }
+        return maxValue();
     }
 
     /*Desde el nodo hasta su banda de partida
@@ -147,7 +149,8 @@ public class Problem implements AdversarySearchProblem<State> {
                         return (1+ recorridoPos (board, i+1,j,ficha));
                     if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_')&&((i-1)>=0))
                         return (1+ recorridoPos (board, i-1,j,ficha));
-        } 
+        }
+        return maxValue(); 
     }    
 
     /*
@@ -160,12 +163,19 @@ public class Problem implements AdversarySearchProblem<State> {
     return false;
     }
     */
-
     //Devuelve true si es un estado final
     public boolean end(State state){
         if (state.getTokensPlayer()==14 || state.getTokensCpu()==14)
             return true;
         return false;
+    }
+
+    public ArrayList<Token> cloneList(ArrayList<Token> list){
+        ArrayList<Token> clone = new ArrayList<Token>(list.size());
+        for(int i=0;i<list.size(); i++) {
+          clone.add(list.get(i));
+        }
+        return clone;
     }
 
     //Devuelve el minimo valor de la euristica
