@@ -30,7 +30,6 @@ public class Problem implements AdversarySearchProblem<State> {
         int tokensCPUP = parent.getTokensCPU();
         State child = new State();
         Token token = new Token(); 
-<<<<<<< HEAD
         char color ='_';
         for(int i=0;i<7;i++){
             for(int j=0;j<7;j++){
@@ -40,18 +39,6 @@ public class Problem implements AdversarySearchProblem<State> {
                     color = 'n';                    
                 else
                     color ='b';
-=======
-        Cahr color = '_';
-        for(int i=0:i<7;i++){
-            for(int j=0;j<7;j++){
-                token.setRow(i);
-                token.setRow(j);
-                if(max){
-                	color = 'n';
-                }else{
-                	color = 'b';
-                }
->>>>>>> 956296504e7ab36ebe61e45a5d9cdd3e9b85e14c
                 token.setRow(color);
                 if (!(child.ocuppied(token))){
                     childTokens = parentTokens.clone();
