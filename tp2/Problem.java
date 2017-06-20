@@ -33,44 +33,28 @@ public class Problem implements AdversarySearchProblem<State> {
         State child = new State();
         Token token = new Token(); 
         char color ='_';
-        for(int i=0;i<7;i++){
-            for(int j=0;j<7;j++){
-            	child = new State();
-             childTokens = new ArrayList<Token>();
-                //token.setRow(i);
-                //token.setColumn(j);
+        int i=0;
+        int j=0;
+        for(i=0;i<7;i++){
+            for(j=0;j<7;j++){
+              childTokens = new ArrayList<Token>();
                 if (max) 
                     color = 'n';                    
                 else
                     color ='b';
-                //token.setColor(color);
                 token = new Token(i,j,color);
 
                 childTokens = cloneList(parentTokens);
-                childTokens.add(token);
-                child.setTokens(childTokens);
                 if(max){
-                    child.setTokensCpu(tokensCpuP+1);
-                    child.setTokensPlayer(tokensPlayerP);
+                    tokensCpuP++;
                 }else{
-                    child.setTokensCpu(tokensCpuP);
-                    child.setTokensPlayer(tokensPlayerP+1);
+                  tokensPlayerP++;
                 }
-                child.setParent(parent);
-
+                child = new State(childTokens,max,tokensPlayerP,tokensCpuP,parent);
                 if (!(child.ocuppied(i,j))){
-                    /*childTokens = cloneList(parentTokens);
-                    childTokens.add(token);
-                    child.setTokens(childTokens);
-                    if(max){
-                        child.setTokensCpu(tokensCpuP+1);
-                        child.setTokensPlayer(tokensPlayerP);
-                    }else{
-                        child.setTokensCpu(tokensCpuP);
-                        child.setTokensPlayer(tokensPlayerP+1);
-                    }
-                    child.setParent(parent);*/
-                    successors.add(child);
+                  childTokens.add(token);
+                  child.setTokens(childTokens);
+                  successors.add(child);
                 }
             }
         }   
@@ -189,7 +173,7 @@ public class Problem implements AdversarySearchProblem<State> {
     }
 
     public ArrayList<Token> cloneList(ArrayList<Token> list){
-        ArrayList<Token> clone = new ArrayList<Token>(list.size());
+        ArrayList<Token> clone = new ArrayList<Token>();
         for(int i=0;i<list.size(); i++) {
           clone.add(list.get(i));
         }
