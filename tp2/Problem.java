@@ -63,6 +63,7 @@ public class Problem implements AdversarySearchProblem<State> {
       }
 
     public int value(State state){
+        System.out.println("ENTRO VALUE");
         ArrayList<Token> tokens= state.getTokens();
         char [][] board = state.generateBoard();
         //almacenamos
@@ -99,7 +100,7 @@ public class Problem implements AdversarySearchProblem<State> {
           else
               return ((recorridoNeg(board, fni, fnj ,'b'))+(recorridoPos (board, ini, inj ,'b')));
         }
-        return 7;
+        return minValue();
     }
 
     /*Desde el nodo hasta su banda de llegada
@@ -114,13 +115,16 @@ public class Problem implements AdversarySearchProblem<State> {
             else
                 if (board[i][j+1]==ficha) //si la siguiente es del mismo tipo de ficha
                     return recorridoPos (board, i,j+1,ficha);
-                else
-                    if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_')&&((i+1)<=6))
+                else{
+                    if (((i+1)<=6)&&((i-1)>=0)) {
+                      if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_'))
                         return (1+ recorridoPos (board, i+1,j,ficha));
-                    if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_')&&((i-1)>=0))
+                      if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_'))
                         return (1+ recorridoPos (board, i-1,j,ficha));
+                    }
+                  }
         }
-        return maxValue();
+        return minValue();
     }
 
     /*Desde el nodo hasta su banda de partida
@@ -135,13 +139,17 @@ public class Problem implements AdversarySearchProblem<State> {
             else
                 if (board[i][j-1]==ficha) //si la siguiente es del mismo tipo de ficha
                     return recorridoPos (board, i,j-1,ficha);
-                else
+                else{
+                  if (((i+1)<=6)&&((i-1)>=0)) {
                     if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_')&&((i+1)<=6))
                         return (1+ recorridoPos (board, i+1,j,ficha));
                     if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_')&&((i-1)>=0))
                         return (1+ recorridoPos (board, i-1,j,ficha));
+                  }
+                }
+                    
         }
-        return maxValue(); 
+        return minValue(); 
     }    
 
 

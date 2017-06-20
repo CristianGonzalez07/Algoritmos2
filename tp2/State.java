@@ -167,8 +167,8 @@ public class State implements AdversarySearchState {
      
      public String toString(){
         //String padre= this.parent.toString();
-        String max = "Es maximo: "+this.max+" ";
-        String fichas= "Cant. fichas 'b' : "+this.tokensPlayer +" Cant. fichas 'n' : "+this.tokensCpu+"\n";
+        String max = "Es maximo: "+this.max+" | ";
+        String fichas= "Cant. fichas 'b' : "+this.tokensPlayer +" | Cant. fichas 'n' : "+this.tokensCpu+"\n";
         String acum="";
         for(int i=0;i<this.tokens.size();i++) {
           acum+=","+this.tokens.get(i).toString();
