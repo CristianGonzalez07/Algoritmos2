@@ -38,7 +38,7 @@ public class Main {
                 }else{
                     System.out.println("Ficha Ingresada Correctamente");
                 }
-        
+        System.in.skip(System.in.available());
         }catch(Exception e){
             System.out.println("Ingreso Invalido");
             playerPlays(state);
@@ -61,7 +61,7 @@ public class Main {
     
         Problem problem = new Problem();
         State actualState = problem.initialState();
-        int depth = 4;//a eleccion
+        int depth =3;//a eleccion
         Boolean turn = true;//turno del jugador?
         MinMaxAlphaBetaEngine<Problem,State>minMaxEngine = new MinMaxAlphaBetaEngine<Problem,State>(problem,depth);
         try{
@@ -69,6 +69,7 @@ public class Main {
             while(!(problem.end(actualState))){
                 System.out.println("===================");
                 showGame(actualState);
+                System.out.println("*************************************TURN: "+turn);
                 if(turn){   
                     actualState = playerPlays(actualState);
                     System.out.println(actualState.toString());

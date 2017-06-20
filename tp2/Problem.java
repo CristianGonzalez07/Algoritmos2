@@ -66,7 +66,7 @@ public class Problem implements AdversarySearchProblem<State> {
       }
 
     public int value(State state){
-        System.out.println("ENTRO VALUE");
+        //System.out.println("ENTRO VALUE");
         ArrayList<Token> tokens= state.getTokens();
         char [][] board = state.generateBoard();
         //almacenamos
@@ -74,14 +74,14 @@ public class Problem implements AdversarySearchProblem<State> {
         ArrayList<Token> tokensCpu = state.getTokensCpu();
       
         if (end(state)) {
-            System.out.println("ENTRO POR ENDSTATE: ");
+            //System.out.println("ENTRO POR ENDSTATE: ");
             if (state.isMax())
                 return minValue();
             else
                 return maxValue();
         }
-
-        int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b')));
+        //int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b')));
+        int res = (distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b'));
         System.out.println("IMPRIMO RES: "+res);
         return res;
 
@@ -119,15 +119,18 @@ public class Problem implements AdversarySearchProblem<State> {
                 if (board[i][j+1]==ficha) //si la siguiente es del mismo tipo de ficha
                     return recorridoPos (board, i,j+1,ficha);
                 else{
-                    if (((i+1)<=6)&&((i-1)>=0)) {
+                    System.out.println("IMPRIMO I: "+i);
+                    System.out.println("IMPRIMO J: "+j);
+                    if (((i+1)<6)&&((i-1)>0)) {
                       if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_'))
-                        return (1+ recorridoPos (board, i+1,j,ficha));
+                        return (1+ recorridoPos (board, i+1,j+1,ficha));
                       if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_'))
-                        return (1+ recorridoPos (board, i-1,j,ficha));
+                        return (1+ recorridoPos (board, i-1,j-1,ficha));
                     }
+                     
                   }
         }
-        return minValue();
+        return 7;
     }
 
     /*Desde el nodo hasta su banda de partida
@@ -143,16 +146,16 @@ public class Problem implements AdversarySearchProblem<State> {
                 if (board[i][j-1]==ficha) //si la siguiente es del mismo tipo de ficha
                     return recorridoPos (board, i,j-1,ficha);
                 else{
-                  if (((i+1)<=6)&&((i-1)>=0)) {
-                    if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_')&&((i+1)<=6))
+                  if (((i+1)<6)&&((i-1)>0)) {
+                    if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_'))
                         return (1+ recorridoPos (board, i+1,j,ficha));
-                    if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_')&&((i-1)>=0))
+                    if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_'))
                         return (1+ recorridoPos (board, i-1,j,ficha));
                   }
                 }
                     
         }
-        return minValue(); 
+        return 7; 
     }    
 
 
@@ -186,7 +189,7 @@ public class Problem implements AdversarySearchProblem<State> {
 
     //Devuelve el minimo valor de la euristica
     public int minValue(){
-        return 120; 
+        return -14; 
     }
     //Devuelve el maximo valor de la euristica
     public int maxValue(){
