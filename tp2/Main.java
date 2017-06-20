@@ -58,10 +58,10 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-    	/*
+    
         Problem problem = new Problem();
         State actualState = problem.initialState();
-        int depth = 2;//a eleccion
+        int depth = 4;//a eleccion
         Boolean turn = true;//turno del jugador?
         MinMaxAlphaBetaEngine<Problem,State>minMaxEngine = new MinMaxAlphaBetaEngine<Problem,State>(problem,depth);
         try{

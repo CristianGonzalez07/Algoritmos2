@@ -128,16 +128,11 @@ public class State implements AdversarySearchState {
     }
 
     public Boolean ocuppied(int i,int j){
-    	Token aux = new Token();
-    	boolean res = false;
-        for(int k=0;k<this.tokens.size();k++) {
-         	aux = this.tokens.get(k);
-         	if ((aux.getRow()==i)&&(aux.getColumn()==j)) {
-         		res = true;
-         	}
-        }
-        return res;
-    	
+      char [][] board =this.generateBoard();
+      if(board[i][j]!='_'){
+          return true;
+      }
+    return false; 
     }
     /** 
      * Checks whether 'this' is equal to another state. 

@@ -26,10 +26,8 @@ public class test{
 
         ArrayList<State> successors= p.getSuccessors(state);
 		for (int i=0;i<successors.size();i++){
-
-            System.out.println((successors.get(0)).toString());
-             System.out.println((successors.get(0)).toString());
-        }
+                                 System.out.println((successors.get(i)).toString());
+                            }
 
        
         //System.out.println(p.value(state));

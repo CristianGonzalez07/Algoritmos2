@@ -36,7 +36,7 @@ public class Problem implements AdversarySearchProblem<State> {
         for(int i=0;i<7;i++){
             for(int j=0;j<7;j++){
             	child = new State();
-
+             childTokens = new ArrayList<Token>();
                 //token.setRow(i);
                 //token.setColumn(j);
                 if (max) 
@@ -46,8 +46,20 @@ public class Problem implements AdversarySearchProblem<State> {
                 //token.setColor(color);
                 token = new Token(i,j,color);
 
+                childTokens = cloneList(parentTokens);
+                childTokens.add(token);
+                child.setTokens(childTokens);
+                if(max){
+                    child.setTokensCpu(tokensCpuP+1);
+                    child.setTokensPlayer(tokensPlayerP);
+                }else{
+                    child.setTokensCpu(tokensCpuP);
+                    child.setTokensPlayer(tokensPlayerP+1);
+                }
+                child.setParent(parent);
+
                 if (!(child.ocuppied(i,j))){
-                    childTokens = cloneList(parentTokens);
+                    /*childTokens = cloneList(parentTokens);
                     childTokens.add(token);
                     child.setTokens(childTokens);
                     if(max){
@@ -57,11 +69,8 @@ public class Problem implements AdversarySearchProblem<State> {
                         child.setTokensCpu(tokensCpuP);
                         child.setTokensPlayer(tokensPlayerP+1);
                     }
-                    child.setParent(parent);
+                    child.setParent(parent);*/
                     successors.add(child);
-                    System.out.println("tamaño = "+successors.size());
-                    System.out.println("Cree");
-               		System.out.println(child.toString());
                 }
             }
         }   
