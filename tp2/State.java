@@ -37,6 +37,19 @@ public class State implements AdversarySearchState {
         this.tokensCpu=tokensCpuP;
     }
 
+    public State cloneState(){
+        State clone = new State();
+        clone.tokensPlayer = this.tokensPlayer;
+        clone.tokensCpu = this.tokensCpu;
+        clone.parent = this.parent;
+        clone.max = this.max;
+        ArrayList<Token> cloneList = new ArrayList<Token>();
+        for(int i=0;i<this.tokens.size(); i++) {
+          cloneList.add(this.tokens.get(i));
+        }
+        clone.tokens = cloneList;
+        return clone;
+    }
 
     public boolean isMax(){
         return max;
@@ -44,6 +57,14 @@ public class State implements AdversarySearchState {
 
     public ArrayList<Token> getTokens(){
         return this.tokens;
+    }
+
+    public void switchState(){
+        if(this.max){
+            this.max = false;
+        }else{
+            this.max = true;
+        }
     }
     /*
      *@pre. true

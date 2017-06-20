@@ -9,9 +9,7 @@ public class Main {
         if(!(state.ocuppied(i,j))){
             token = new Token(i,j,color);
             ArrayList<Token> tokens = new ArrayList<Token>();
-            if(state.getTokens() != null){
-                tokens = state.getTokens();    
-            } 
+            tokens = state.getTokens();    
             tokens.add(token);
             state.setTokens(tokens);
             state.setTokensPlayer(state.cantTokensPlayer()+1);
@@ -35,6 +33,7 @@ public class Main {
                 insert = insertToken(fila,columna,'b',state);
                 if(!insert){
                     System.out.println("No se puede ingresar en esa posicion.Ingrese una posicion valida o no ocupada");
+                    playerPlays(state);
                 }else{
                     System.out.println("Ficha Ingresada Correctamente");
                 }
@@ -43,7 +42,7 @@ public class Main {
             System.out.println("Ingreso Invalido");
             playerPlays(state);
         }
-        
+        state.switchState();
         return state;
     }
 
@@ -61,21 +60,25 @@ public class Main {
     
         Problem problem = new Problem();
         State actualState = problem.initialState();
-        int depth =3;//a eleccion
+        int depth =4;//a eleccion
         Boolean turn = true;//turno del jugador?
         MinMaxAlphaBetaEngine<Problem,State>minMaxEngine = new MinMaxAlphaBetaEngine<Problem,State>(problem,depth);
         try{
             System.out.println("***************************************");
             while(!(problem.end(actualState))){
+                
                 System.out.println("===================");
                 showGame(actualState);
                 System.out.println("*************************************TURN: "+turn);
                 if(turn){   
-                    actualState = playerPlays(actualState);
-                    System.out.println(actualState.toString());
+                    System.out.println("Jugador antes de jugar: "+actualState.toString());
+                    actualState = (playerPlays(actualState)).cloneState();
+                    System.out.println("Jugador despues de jugar: "+actualState.toString());
                 }else{
-                    actualState = minMaxEngine.computeSuccessor(actualState);
-                    System.out.println(actualState.toString());
+                    System.out.println("maquina antes de jugar: "+actualState.toString());
+                    actualState = (minMaxEngine.computeSuccessor(actualState)).cloneState();
+                    System.out.println("maquina despues de jugar: "+actualState.toString());
+                   
                 }
                 turn = !turn;//cambiar de turno
             } 

@@ -41,18 +41,18 @@ public class Problem implements AdversarySearchProblem<State> {
             for(j=0;j<7;j++){
               childTokens = new ArrayList<Token>();
                 if (max) 
-                    color = 'n';                    
+                    color = 'b';                    
                 else
-                    color ='b';
+                    color ='n';
                 token = new Token(i,j,color);
 
                 childTokens = cloneList(parentTokens);
                 if(max){
+                  tokensCpu = tokensCpuP;
+                  tokensPlayer = (tokensPlayerP+1);
+                }else{
                     tokensCpu = (tokensCpuP + 1);
                     tokensPlayer = tokensPlayerP;
-                }else{
-                    tokensCpu = tokensCpuP;
-                    tokensPlayer = (tokensPlayerP+1);
                 }
                 child = new State(childTokens,max,tokensPlayer,tokensCpu,parent);
                 if (!(child.ocuppied(i,j))){
@@ -82,7 +82,7 @@ public class Problem implements AdversarySearchProblem<State> {
         }
         //int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b')));
         int res = (distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b'));
-        System.out.println("IMPRIMO RES: "+res);
+        //System.out.println("IMPRIMO RES: "+res);
         return res;
 
     }
@@ -119,8 +119,8 @@ public class Problem implements AdversarySearchProblem<State> {
                 if (board[i][j+1]==ficha) //si la siguiente es del mismo tipo de ficha
                     return recorridoPos (board, i,j+1,ficha);
                 else{
-                    System.out.println("IMPRIMO I: "+i);
-                    System.out.println("IMPRIMO J: "+j);
+                    //System.out.println("IMPRIMO I: "+i);
+                    //System.out.println("IMPRIMO J: "+j);
                     if (((i+1)<6)&&((i-1)>0)) {
                       if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_'))
                         return (1+ recorridoPos (board, i+1,j+1,ficha));
