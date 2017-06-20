@@ -68,17 +68,17 @@ public class Problem implements AdversarySearchProblem<State> {
         //almacenamos
         ArrayList<Token> tokensPlayer = state.getTokensPlayer(); 
         ArrayList<Token> tokensCpu = state.getTokensCpu();
-
+      
         if (end(state)) {
 
             if (state.isMax())
-                return maxValue();
-            else
                 return minValue();
+            else
+                return maxValue();
         }
-        
-        int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b')));
 
+        int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b')));
+        System.out.println("IMPRIMO RES: "+res);
         return res;
 
     }
@@ -182,7 +182,7 @@ public class Problem implements AdversarySearchProblem<State> {
 
     //Devuelve el minimo valor de la euristica
     public int minValue(){
-        return 14; 
+        return 120; 
     }
     //Devuelve el maximo valor de la euristica
     public int maxValue(){

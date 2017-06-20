@@ -61,7 +61,7 @@ public class Main {
     
         Problem problem = new Problem();
         State actualState = problem.initialState();
-        int depth = 4;//a eleccion
+        int depth = 3;//a eleccion
         Boolean turn = true;//turno del jugador?
         MinMaxAlphaBetaEngine<Problem,State>minMaxEngine = new MinMaxAlphaBetaEngine<Problem,State>(problem,depth);
         try{
