@@ -30,6 +30,8 @@ public class Problem implements AdversarySearchProblem<State> {
         boolean max = !(parent.isMax());
         int tokensPlayerP = parent.cantTokensPlayer();
         int tokensCpuP = parent.cantTokensCpu();
+        int tokensPlayer = 0;
+        int tokensCpu = 0;
         State child = new State();
         Token token = new Token(); 
         char color ='_';
@@ -46,11 +48,13 @@ public class Problem implements AdversarySearchProblem<State> {
 
                 childTokens = cloneList(parentTokens);
                 if(max){
-                    tokensCpuP++;
+                    tokensCpu = (tokensCpuP + 1);
+                    tokensPlayer = tokensPlayerP;
                 }else{
-                  tokensPlayerP++;
+                    tokensCpu = tokensCpuP;
+                    tokensPlayer = (tokensPlayerP+1);
                 }
-                child = new State(childTokens,max,tokensPlayerP,tokensCpuP,parent);
+                child = new State(childTokens,max,tokensPlayer,tokensCpu,parent);
                 if (!(child.ocuppied(i,j))){
                   childTokens.add(token);
                   child.setTokens(childTokens);
