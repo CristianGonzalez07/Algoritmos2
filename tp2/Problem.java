@@ -70,7 +70,7 @@ public class Problem implements AdversarySearchProblem<State> {
         ArrayList<Token> tokensCpu = state.getTokensCpu();
       
         if (end(state)) {
-
+            System.out.println("ENTRO POR ENDSTATE: ");
             if (state.isMax())
                 return minValue();
             else
