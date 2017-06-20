@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Main {
  
-    public static State insertToken(int i,int j,char color,State state){
+    public static Boolean insertToken(int i,int j,char color,State state){
         Token token = new Token();
         if(!(state.ocuppied(i,j))){
             token = new Token(i,j,color);
@@ -15,31 +15,30 @@ public class Main {
             tokens.add(token);
             state.setTokens(tokens);
             state.setTokensPlayer(state.cantTokensPlayer()+1);
-            return state;        
+            return true;        
         }else{
-            return null;
+            return false;
         }
     }
 
     public static State playerPlays(State state) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        State insert = new State();
+        boolean insert;
         int fila = 0;
         int columna = 0;
         try{
-            while(insert.getTokens() == null){
                 System.out.println("Ingrese La ficha");
                 System.out.println("Pos i :");
                 fila = Integer.parseInt(br.readLine());
                 System.out.println("Pos j :");
                 columna = Integer.parseInt(br.readLine());
                 insert = insertToken(fila,columna,'b',state);
-                if(insert == null){
+                if(!insert){
                     System.out.println("No se puede ingresar en esa posicion.Ingrese una posicion valida o no ocupada");
                 }else{
                     System.out.println("Ficha Ingresada Correctamente");
                 }
-            }
+        
         }catch(Exception e){
             System.out.println("Ingreso Invalido");
             playerPlays(state);
@@ -59,6 +58,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
+    	/*
         Problem problem = new Problem();
         State actualState = problem.initialState();
         int depth = 2;//a eleccion

@@ -12,7 +12,7 @@ public class State implements AdversarySearchState {
 
     public State(){
         this.parent = null;
-        this.tokens = null;
+        this.tokens = new ArrayList<Token>();
         this.tokensPlayer = 0;
         this.tokensCpu = 0;
     }
@@ -128,13 +128,15 @@ public class State implements AdversarySearchState {
     }
 
     public Boolean ocuppied(int i,int j){
-        if(tokens == null){
-            return false;
-        }else{
-            Token token1 = new Token(i,j,'b');
-            Token token2 = new Token(i,j,'n'); 
-            return (tokens.contains(token1)||tokens.contains(token1));    
+    	Token aux = new Token();
+    	boolean res = false;
+        for(int k=0;k<this.tokens.size();k++) {
+         	aux = this.tokens.get(k);
+         	if ((aux.getRow()==i)&&(aux.getColumn()==j)) {
+         		res = true;
+         	}
         }
+        return res;
     	
     }
     /** 

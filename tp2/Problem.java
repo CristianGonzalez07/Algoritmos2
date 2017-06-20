@@ -35,15 +35,18 @@ public class Problem implements AdversarySearchProblem<State> {
         char color ='_';
         for(int i=0;i<7;i++){
             for(int j=0;j<7;j++){
-                token.setRow(i);
-                token.setColumn(j);
+            	child = new State();
+
+                //token.setRow(i);
+                //token.setColumn(j);
                 if (max) 
                     color = 'n';                    
                 else
                     color ='b';
-                token.setColor(color);
+                //token.setColor(color);
+                token = new Token(i,j,color);
+
                 if (!(child.ocuppied(i,j))){
-                    //childTokens = parentTokens.clone();
                     childTokens = cloneList(parentTokens);
                     childTokens.add(token);
                     child.setTokens(childTokens);
@@ -56,6 +59,9 @@ public class Problem implements AdversarySearchProblem<State> {
                     }
                     child.setParent(parent);
                     successors.add(child);
+                    System.out.println("tamaño = "+successors.size());
+                    System.out.println("Cree");
+               		System.out.println(child.toString());
                 }
             }
         }   
@@ -78,7 +84,7 @@ public class Problem implements AdversarySearchProblem<State> {
                 return minValue();
         }
         
-        int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b'))-((state.cantTokensCpu())+(state.cantTokensPlayer())));
+        int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b')));
 
         return res;
 
