@@ -35,6 +35,13 @@ public class Token {
     this.row=i;
   }
 
+  public boolean equals(Token other){
+    boolean rows = (this.row==other.getRow());
+    boolean columns = (this.column==other.getColumn());
+    boolean colors =(this.color==other.getColor());
+    return (rows&&columns&&colors);
+  }
+
   public void setColumn(int j){
     this.column=j;
   }

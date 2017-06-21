@@ -60,25 +60,17 @@ public class Main {
     
         Problem problem = new Problem();
         State actualState = problem.initialState();
-        int depth =4;//a eleccion
+        int depth =2;//a eleccion
         Boolean turn = true;//turno del jugador?
         MinMaxAlphaBetaEngine<Problem,State>minMaxEngine = new MinMaxAlphaBetaEngine<Problem,State>(problem,depth);
         try{
             System.out.println("***************************************");
             while(!(problem.end(actualState))){
-                
-                System.out.println("===================");
                 showGame(actualState);
-                System.out.println("*************************************TURN: "+turn);
                 if(turn){   
-                    System.out.println("Jugador antes de jugar: "+actualState.toString());
                     actualState = (playerPlays(actualState)).cloneState();
-                    System.out.println("Jugador despues de jugar: "+actualState.toString());
                 }else{
-                    System.out.println("maquina antes de jugar: "+actualState.toString());
-                    actualState = (minMaxEngine.computeSuccessor(actualState)).cloneState();
-                    System.out.println("maquina despues de jugar: "+actualState.toString());
-                   
+                    actualState = (minMaxEngine.computeSuccessor(actualState)).cloneState();                   
                 }
                 turn = !turn;//cambiar de turno
             } 

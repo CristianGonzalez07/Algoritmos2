@@ -66,98 +66,52 @@ public class Problem implements AdversarySearchProblem<State> {
       }
 
     public int value(State state){
-        //System.out.println("ENTRO VALUE");
+       
         ArrayList<Token> tokens= state.getTokens();
         char [][] board = state.generateBoard();
         //almacenamos
         ArrayList<Token> tokensPlayer = state.getTokensPlayer(); 
         ArrayList<Token> tokensCpu = state.getTokensCpu();
-      
-        if (end(state)) {
-            //System.out.println("ENTRO POR ENDSTATE: ");
-            if (state.isMax())
-                return minValue();
-            else
-                return maxValue();
-        }
-        //int res = Math.abs((distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b')));
-        int res = (distance(board, tokensCpu,'n')+distance(board, tokensPlayer,'b'));
-        //System.out.println("IMPRIMO RES: "+res);
-        return res;
 
-    }
-
-    //Calcula la distancia de una ficha a sus bandas
-    private int distance(char[][] board, ArrayList<Token> camino, char ficha){
-        if (camino.size()!=0) {
-          Token finicial= camino.get(0);
-          Token ffinal = camino.get(camino.size()-1);
-          //Componentes de finicial
-          int ini = finicial.getColumn();
-          int inj = finicial.getRow();
-          //Componentes de ffinal
-          int fni = ffinal.getColumn();
-          int fnj = ffinal.getRow();
-          if (ficha=='n')
-              return ((recorridoNeg(board, ini, inj ,'n'))+(recorridoPos (board, fni, fnj ,'n')));
-          else
-              return ((recorridoNeg(board, fni, fnj ,'b'))+(recorridoPos (board, ini, inj ,'b')));
-        }
-        return minValue();
-    }
-
-    /*Desde el nodo hasta su banda de llegada
-     *Calcula rodeando a las fichas del oponente (cambiar cuando pongamos
-     *la funcionalidad de poder comer)*/
-    private int recorridoPos(char[][] board, int i, int j, char ficha){
-        if(j==6){
-            return 0;
-        }else{
-            if (board[i][j+1]== '_') // si la siguiente posicion esta vacia
-                return (1+ recorridoPos (board, i,j+1,ficha));
-            else
-                if (board[i][j+1]==ficha) //si la siguiente es del mismo tipo de ficha
-                    return recorridoPos (board, i,j+1,ficha);
-                else{
-                    //System.out.println("IMPRIMO I: "+i);
-                    //System.out.println("IMPRIMO J: "+j);
-                    if (((i+1)<6)&&((i-1)>0)) {
-                      if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_'))
-                        return (1+ recorridoPos (board, i+1,j+1,ficha));
-                      if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_'))
-                        return (1+ recorridoPos (board, i-1,j-1,ficha));
-                    }
-                     
-                  }
-        }
-        return 7;
-    }
-
-    /*Desde el nodo hasta su banda de partida
-     *Calcula rodeando a las fichas del oponente (cambiar cuando pongamos
-     *la funcionalidad de poder comer)*/
-    private int recorridoNeg(char[][] board, int i, int j, char ficha){
-        if(j==0){
-            return 0;
-        }else{
-            if (board[i][j-1]== '_') // si la siguiente posicion esta vacia
-                return (1+ recorridoPos (board, i,j-1,ficha));
-            else
-                if (board[i][j-1]==ficha) //si la siguiente es del mismo tipo de ficha
-                    return recorridoPos (board, i,j-1,ficha);
-                else{
-                  if (((i+1)<6)&&((i-1)>0)) {
-                    if ((board[i-1][j]!=ficha) && (board[i+1][j]=='_'))
-                        return (1+ recorridoPos (board, i+1,j,ficha));
-                    if ((board[i+1][j]!=ficha) && (board[i-1][j]=='_'))
-                        return (1+ recorridoPos (board, i-1,j,ficha));
-                  }
+        int res =0;
+        if (!end(state)) {
+          if (state.isMax()){
+              int aux =0;
+              for (int i=0;i<7 ;i++ ) {
+                for (int j=0;j<7 ;j++ ) {
+                  if (board[i][j]=='n')
+                    aux++;
+                  else
+                    aux--;
                 }
-                    
+                if(aux>=res)
+                  res=aux;
+                aux=0;
+              }
+          }else{
+              int aux =0;
+              for (int j=0;j<7 ;j++ ) {
+                for (int i=0;i<7 ;i++ ) {
+                  if (board[i][j]=='b')
+                    aux++;
+                  else
+                    aux--;
+                }
+                if(aux>=res)
+                  res=aux;
+                aux=0;
+              }
+          }
+        }else{
+          if (state.isMax())
+                return maxValue();
+            else
+                return minValue();
         }
-        return 7; 
-    }    
+      
+    return res;
 
+    }
 
      /*
      * @pre. state!=null.
@@ -171,11 +125,7 @@ public class Problem implements AdversarySearchProblem<State> {
         char[][] board = state.generateBoard();
         int cantTP = state.cantTokensPlayer();
         int cantTC = state.cantTokensCpu();
-        int distP = distance(board,tokensPlayer,'b');
-        int distC = distance(board,tokensCpu,'n');
-        if (((distP==0) || (distC==0)) && ((cantTP>0) || (cantTC>0)))
-            return true;
-          
+               
         return false;
     }
 
@@ -193,7 +143,7 @@ public class Problem implements AdversarySearchProblem<State> {
     }
     //Devuelve el maximo valor de la euristica
     public int maxValue(){
-        return 0; 
+        return 14; 
     }
 
 }
