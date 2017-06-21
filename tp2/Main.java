@@ -36,31 +36,38 @@ public class Main {
                     playerPlays(state);
                 }else{
                     System.out.println("Ficha Ingresada Correctamente");
+                    state.switchState();
                 }
         System.in.skip(System.in.available());
         }catch(Exception e){
             System.out.println("Ingreso Invalido");
             playerPlays(state);
         }
-        state.switchState();
+        
         return state;
     }
 
     public static void showGame(State state){
         char [][] board = state.generateBoard();
+        System.out.println("     0 1 2 3 4 5 6");
+        System.out.println("    _______________");
         for ( int i=0;i<7;i++) {
+            System.out.print(" "+i+" | ");
             for (int j =0;j<7 ;j++ ) {
                 System.out.print(board[i][j]+" ");
+                if (j==6)
+                  System.out.print("|");
             }
         System.out.println("");
         }
+        System.out.println("");
     }
 
     public static void main(String[] args) throws Exception {
     
         Problem problem = new Problem();
         State actualState = problem.initialState();
-        int depth =2;//a eleccion
+        int depth =3;//a eleccion
         Boolean turn = true;//turno del jugador?
         MinMaxAlphaBetaEngine<Problem,State>minMaxEngine = new MinMaxAlphaBetaEngine<Problem,State>(problem,depth);
         try{

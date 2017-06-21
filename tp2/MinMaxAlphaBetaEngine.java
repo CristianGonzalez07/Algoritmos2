@@ -60,7 +60,6 @@ public class MinMaxAlphaBetaEngine<P extends AdversarySearchProblem<S>, S extend
 			throw new IllegalArgumentException("Wrong game state input, there is not successors");
 		best = successors.remove(0);
 		bestValue = computeValue(best);
-		System.out.println("empece con : "+ bestValue);
 		for(S child : successors){			
 			int value = computeValue(child);
 			if (!max){
@@ -73,7 +72,6 @@ public class MinMaxAlphaBetaEngine<P extends AdversarySearchProblem<S>, S extend
 				}
 			}
 		}
-		System.out.println("termine con : "+bestValue);
 		return best;
 	}
 

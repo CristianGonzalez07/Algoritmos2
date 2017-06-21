@@ -80,24 +80,33 @@ public class Problem implements AdversarySearchProblem<State> {
               for (int i=0;i<7 ;i++ ) {
                 for (int j=0;j<7 ;j++ ) {
                   if (board[i][j]=='n')
-                    aux++;
-                  else
+                    aux+=2;
+                  if (board[i][j]=='_')
                     aux--;
+                  if (board[i][j]=='b')
+                    aux-=2;
+                  
                 }
-                if(aux>=res)
+                if(aux<res)
                   res=aux;
                 aux=0;
               }
+              //System.out.println("/////////////////////////////////////////////////");
+              //System.out.println("RES: "+res);
+              //System.out.println(state.toString());
+              //System.out.println("////////////////////////////////////////////////");
           }else{
               int aux =0;
               for (int j=0;j<7 ;j++ ) {
                 for (int i=0;i<7 ;i++ ) {
                   if (board[i][j]=='b')
                     aux++;
-                  else
-                    aux--;
+                  else{
+                    if (board[i][j]=='n')
+                      aux--;
+                  }
                 }
-                if(aux>=res)
+                if(aux<res)
                   res=aux;
                 aux=0;
               }
