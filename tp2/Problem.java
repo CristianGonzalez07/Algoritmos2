@@ -87,7 +87,7 @@ public class Problem implements AdversarySearchProblem<State> {
                     aux-=2;
                   
                 }
-                if(aux<res)
+                if(aux>res)
                   res=aux;
                 aux=0;
               }
@@ -106,7 +106,7 @@ public class Problem implements AdversarySearchProblem<State> {
                       aux--;
                   }
                 }
-                if(aux<res)
+                if(aux>res)
                   res=aux;
                 aux=0;
               }
