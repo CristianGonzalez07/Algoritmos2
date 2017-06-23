@@ -8,7 +8,7 @@ public class Problem implements AdversarySearchProblem<State> {
 
     public State initialState(){
         ArrayList<Token> tokens= new ArrayList<Token>();
-        State initial= new State(tokens,false,0,0,null);
+        State initial= new State(true);
         return initial;
     }
 
@@ -25,120 +25,192 @@ public class Problem implements AdversarySearchProblem<State> {
      */
       public ArrayList<State> getSuccessors(State parent) {
         ArrayList<State> successors = new ArrayList<State>(); 
-        ArrayList<Token> parentTokens = parent.getTokens();
-        ArrayList<Token> childTokens = new ArrayList<Token>();
-        boolean max = !(parent.isMax());
-        int tokensPlayerP = parent.cantTokensPlayer();
-        int tokensCpuP = parent.cantTokensCpu();
-        int tokensPlayer = 0;
-        int tokensCpu = 0;
-        State child = new State();
+        State child = new State(!parent.isMax());
+        State childAux = new State(!parent.isMax());
         Token token = new Token(); 
         char color ='_';
-        int i=0;
-        int j=0;
-        for(i=0;i<7;i++){
-            for(j=0;j<7;j++){
-              childTokens = new ArrayList<Token>();
-                if (max) 
+        for(int i=0;i<7;i++){
+            for(int j=0;j<7;j++){
+                if (parent.isMax()) 
                     color = 'b';                    
                 else
                     color ='n';
-                token = new Token(i,j,color);
+                token = new Token(i,j,color,false);
 
-                childTokens = cloneList(parentTokens);
-                if(max){
-                  tokensCpu = tokensCpuP;
-                  tokensPlayer = (tokensPlayerP+1);
-                }else{
-                    tokensCpu = (tokensCpuP + 1);
-                    tokensPlayer = tokensPlayerP;
-                }
-                child = new State(childTokens,max,tokensPlayer,tokensCpu,parent);
-                if (!(child.ocuppied(i,j))){
-                  childTokens.add(token);
-                  child.setTokens(childTokens);
+                child = parent.cloneState();
+                if (!(child.ocuppied(token))){
+                	if(!child.willRemoved(token)){
+                		child.addToBoard(token);
+                	}
                   successors.add(child);
                 }
             }
-        }   
+        } 
         return successors;
       }
 
     public int value(State state){
-       
-        ArrayList<Token> tokens= state.getTokens();
-        char [][] board = state.generateBoard();
-        //almacenamos
-        ArrayList<Token> tokensPlayer = state.getTokensPlayer(); 
-        ArrayList<Token> tokensCpu = state.getTokensCpu();
-
-        int res =0;
-        if (!end(state)) {
-          if (state.isMax()){
-              int aux =0;
-              for (int i=0;i<7 ;i++ ) {
-                for (int j=0;j<7 ;j++ ) {
-                  if (board[i][j]=='n')
-                    aux+=2;
-                  if (board[i][j]=='_')
-                    aux--;
-                  if (board[i][j]=='b')
-                    aux-=2;
-                  
-                }
-                if(aux>res)
-                  res=aux;
-                aux=0;
-              }
-              //System.out.println("/////////////////////////////////////////////////");
-              //System.out.println("RES: "+res);
-              //System.out.println(state.toString());
-              //System.out.println("////////////////////////////////////////////////");
-          }else{
-              int aux =0;
-              for (int j=0;j<7 ;j++ ) {
-                for (int i=0;i<7 ;i++ ) {
-                  if (board[i][j]=='b')
-                    aux++;
-                  else{
-                    if (board[i][j]=='n')
-                      aux--;
-                  }
-                }
-                if(aux>res)
-                  res=aux;
-                aux=0;
-              }
-          }
-        }else{
-          if (state.isMax())
-                return maxValue();
-            else
-                return minValue();
-        }
-      
-    return res;
-
+      if (end(state)){
+        if (state.isMax()) 
+          return maxValue();
+        else
+          return minValue();
+      }
+      //System.out.println("**********"+(valueBlack(state)+valueWhite(state)));
+      return (valueBlack(state)+valueWhite(state));
     }
+
+    private int valueWhite(State state){
+      char[][] board =state.cloneBoard();     
+      ArrayList<Token> arr = new ArrayList<Token>();
+      ArrayList<Token> visitados = new ArrayList<Token>();
+      for (int j= 0; j<7 ;j++) {
+        if (board [0][j] == 'b') {
+          Token t = new Token(0,j,'b',false); 
+          arr.add(t);
+          visitados.add(t);
+        }
+      }
+      int acum=0;
+      ArrayList<Integer> res = new ArrayList<Integer>();
+      while(!arr.isEmpty()){
+        Token t2 = arr.remove(0);
+        acum++;
+        /*if (t2.getRow() == 6) {
+          //return true;
+          break;
+        }*/
+        ArrayList<Token> adyacentes = state.obtainAdj(t2);
+        for (Token t3: adyacentes) {
+          if (!visitados.contains(t3) && !arr.contains(t3)) {
+            acum+=valorationAdj(t3,board);
+            visitados.add(t3);
+            arr.add(t3);
+          }
+        }
+        res.add(acum);
+        acum=0;  
+      }
+      return maxInt(res);
+    }
+
+    private int valueBlack(State state){
+      char[][] board =state.cloneBoard();     
+      ArrayList<Token> arr = new ArrayList<Token>();
+      ArrayList<Token> visitados = new ArrayList<Token>();
+      for (int i= 0; i<7 ;i++) {
+        if (board [i][0] == 'n') {
+          Token t = new Token(i,0,'n',false); 
+          arr.add(t);
+          visitados.add(t);
+        }
+      }
+      int acum=0;
+      ArrayList<Integer> res = new ArrayList<Integer>();
+      while(!arr.isEmpty()){
+        Token t2 = arr.remove(0);
+        acum++;
+        /*if (t2.getColumn() == 6) {
+          //return true;
+          break;
+        }*/
+        ArrayList<Token> adyacentes = state.obtainAdj(t2);
+        for (Token t3: adyacentes) {
+          if (!visitados.contains(t3) && !arr.contains(t3)) {
+            acum+=valorationAdj(t3,board);
+            visitados.add(t3);
+            arr.add(t3);
+          }
+        }
+        res.add(acum);
+        acum=0;  
+      }
+      return maxInt(res);
+    }
+    
+    private int valorationAdj(Token t, char[][] board){
+         int row = t.getRow();
+         int column = t.getColumn();
+         char color = t.getColor();
+         int res = 0;
+        //Evalua los adyacentes de la esquina lateral izquierda
+        if (row==0&&column<6) {
+           if (board[row+1][column]==color) {
+               if(color=='b')
+                  res+=2;
+           }
+           if (board[row][column+1]==color) {
+               if(color=='n')
+                  res+=2;
+           }
+        }else{
+            if (row<6&&column==0) {
+               if (board[row+1][column]==color) {
+                   if(color=='b')
+                      res+=2;
+               }
+               if (board[row][column+1]==color) {
+                   if(color=='n')
+                      res+=2;
+               }
+            }else{
+                if (color=='b') {
+                    //Evalua los adyacentes de la esquina superior derecha
+                    if (row<6&&column==6) {
+                        if (board[row+1][column]==color) 
+                           res+=2;
+                    }
+                }else{
+                   if(color=='n'){
+                         //Evalua los adyacentes de la esquina inferior izquierda
+                      if (row==6&&column<6) {
+                         if (board[row][column+1]==color) 
+                            res+=2;
+                      }
+                   }else{
+                         //Evalua los cuatro adyacentes que lo rodea
+                        if (row<6 && row>0 && column<6 && column>0) {
+                            if (board[row+1][column]==color) {
+                               if(color=='b')
+                                  res+=2;
+                           }
+                           if (board[row][column+1]==color) {
+                               if(color=='n')
+                                  res+=2;
+                           }
+                        }
+                    }
+                }
+            }
+          }
+          return res;
+        }
+
+     private int maxInt(ArrayList<Integer> arr){
+        if(arr.isEmpty())
+          return 0;
+        int res=arr.get(0);
+        for (int i=1;i<arr.size() ;i++ ) {
+          if (res<arr.get(i))
+            res=arr.get(i);
+        }
+        return res;
+     }   
 
      /*
      * @pre. state!=null.
      * @post. true is returned iff state is an end state.  
     */
     public boolean end(State state){
-        if (state.cantTokensPlayer()==14 || state.cantTokensCpu()==14)
+        if (state.getPlayerTokens()==0 || state.getCpuTokens()==0)
             return true;
-        ArrayList<Token> tokensPlayer = state.getTokensPlayer(); 
-        ArrayList<Token> tokensCpu = state.getTokensCpu();
-        char[][] board = state.generateBoard();
-        int cantTP = state.cantTokensPlayer();
-        int cantTC = state.cantTokensCpu();
+        if(state.ganadorVertical() || state.ganadorHorizontal())
+          return true;
                
         return false;
     }
 
-    public ArrayList<Token> cloneList(ArrayList<Token> list){
+    public ArrayList<Token> cloneList (ArrayList<Token> list){
         ArrayList<Token> clone = new ArrayList<Token>();
         for(int i=0;i<list.size(); i++) {
           clone.add(list.get(i));
@@ -148,11 +220,11 @@ public class Problem implements AdversarySearchProblem<State> {
 
     //Devuelve el minimo valor de la euristica
     public int minValue(){
-        return -14; 
+        return -50; 
     }
     //Devuelve el maximo valor de la euristica
     public int maxValue(){
-        return 14; 
+        return 50; 
     }
 
 }
